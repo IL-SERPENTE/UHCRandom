@@ -6,31 +6,31 @@ import net.samagames.survivalapi.SurvivalAPI;
 import net.samagames.survivalapi.game.SurvivalGame;
 import net.samagames.survivalapi.game.types.SurvivalSoloGame;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
-import net.samagames.survivalapi.modules.AbstractSurvivalModule;
 import net.samagames.survivalapi.modules.block.DiamondFlowerModule;
 import net.samagames.survivalapi.modules.block.HardObsidianModule;
 import net.samagames.survivalapi.modules.block.ParanoidModule;
 import net.samagames.survivalapi.modules.block.RandomChestModule;
-import org.apache.commons.lang3.tuple.Triple;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 public class UHCRandom extends JavaPlugin
 {
-    private List<Triple<Class<? extends AbstractSurvivalModule>, Map<String, Object>, String>> enabledModules;
+    private List<RandomModule> enabledModules;
 
     @Override
     public void onEnable()
     {
         SurvivalAPI api = SurvivalAPI.get();
-        List<Triple<Class<? extends AbstractSurvivalModule>, Map<String, Object>, String>> modules = new ArrayList<>();
+        List<RandomModule> modules = new ArrayList<>();
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(5)).getAsInt();
         Random random = new Random();
 
-        modules.add(Triple.of(DiamondFlowerModule.class, null, "Les fleurs peuvent donner du diamant."));
-        modules.add(Triple.of(HardObsidianModule.class, null, "L'obsidienne est plus dure à casser (pioche en diamant uniquement)."));
-        modules.add(Triple.of(ParanoidModule.class, null, "Tout minage de diamant est annoncé aux autres joueurs."));
+        modules.add(new RandomModule(DiamondFlowerModule.class, null, "Les fleurs peuvent donner du diamant.", new ItemStack(Material.RED_ROSE)));
+        modules.add(new RandomModule(HardObsidianModule.class, null, "L'obsidienne est plus dure à casser (pioche en diamant uniquement).", new ItemStack(Material.OBSIDIAN)));
+        modules.add(new RandomModule(ParanoidModule.class, null, "Tout minage de diamant est annoncé aux autres joueurs.", new ItemStack(Material.DIAMOND)));
 
         enabledModules = new ArrayList<>();
         modulesNumber = Math.min(modulesNumber, modules.size());
@@ -38,12 +38,12 @@ public class UHCRandom extends JavaPlugin
         for (int i = 0; i < modulesNumber; i++)
         {
             int rand = random.nextInt() % modules.size();
-            Triple<Class<? extends AbstractSurvivalModule>, Map<String, Object>, String> last = null;
-            for (Triple<Class<? extends AbstractSurvivalModule>, Map<String, Object>, String> entry : modules)
+            RandomModule last = null;
+            for (RandomModule entry : modules)
             {
                 if (rand == 0)
                 {
-                    api.loadModule(entry.getLeft(), entry.getMiddle());
+                    api.loadModule(entry.getModuleClass(), entry.getConfig());
                     enabledModules.add(entry);
                     last = entry;
                     break ;
@@ -82,8 +82,8 @@ public class UHCRandom extends JavaPlugin
     public void displayModules(Runnable callback)
     {
         getServer().broadcastMessage("Modules activés :");
-        for (Triple<Class<? extends AbstractSurvivalModule>, Map<String, Object>, String> mod : enabledModules)
-            getServer().broadcastMessage(" - " + mod.getRight());
+        for (RandomModule mod : enabledModules)
+            getServer().broadcastMessage(" - " + mod.getName());
         callback.run();
     }
 }
