@@ -1,0 +1,8 @@
+name: UHCRandom
+main: net.samagames.uhcrandom.UHCRandom
+version: 1.0
+
+depend: [SamaGamesAPI, SurvivalAPI]
+
+author: Rigner
+website: http://samagames.net/
