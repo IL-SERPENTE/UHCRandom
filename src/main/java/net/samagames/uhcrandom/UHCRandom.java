@@ -28,10 +28,12 @@ public class UHCRandom extends JavaPlugin
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(5)).getAsInt();
         Random random = new Random();
 
+        /** Modules list */
         modules.add(new RandomModule(DiamondFlowerModule.class, null, "Les fleurs peuvent donner du diamant.", new ItemStack(Material.RED_ROSE)));
         modules.add(new RandomModule(HardObsidianModule.class, null, "L'obsidienne est plus dure à casser (pioche en diamant uniquement).", new ItemStack(Material.OBSIDIAN)));
         modules.add(new RandomModule(ParanoidModule.class, null, "Tout minage de diamant est annoncé aux autres joueurs.", new ItemStack(Material.DIAMOND)));
 
+        /** Random modules selector */
         enabledModules = new ArrayList<>();
         modulesNumber = Math.min(modulesNumber, modules.size());
         getLogger().info("Selecting " + modulesNumber + " modules.");
@@ -53,7 +55,9 @@ public class UHCRandom extends JavaPlugin
             if (last != null)
                 modules.remove(last);
         }
+        getLogger().info("Random modules selected");
 
+        /** Solo or team game, depending on config, and overriding of startGame function to display modules (will me moved to GameLoop later) */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
         SurvivalGame game;
         if (nb > 1)
@@ -79,6 +83,11 @@ public class UHCRandom extends JavaPlugin
         SamaGamesAPI.get().getGameManager().registerGame(game);
     }
 
+    /**
+     * Show modules GUI to players.
+     * Work in progress.
+     * @param callback
+     */
     public void displayModules(Runnable callback)
     {
         getServer().broadcastMessage("Modules activés :");

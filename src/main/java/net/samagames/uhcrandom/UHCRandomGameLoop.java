@@ -13,6 +13,7 @@ public class UHCRandomGameLoop extends SurvivalGameLoop
     }
 
     /**
-     * Do we need to implement something ??
+     * Will contain function to open Moodules GUI, after teleport.
+     * Waiting for BlueSlime work about it.
      */
 }
