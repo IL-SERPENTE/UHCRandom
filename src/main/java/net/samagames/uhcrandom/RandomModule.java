@@ -32,6 +32,11 @@ public class RandomModule
 
     public String getName()
     {
+        return this.moduleclass.getName().substring(0, this.moduleclass.getName().indexOf("Module"));
+    }
+
+    public String getDescription()
+    {
         return this.name;
     }
 

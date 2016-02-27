@@ -2,6 +2,7 @@ package net.samagames.uhcrandom;
 
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.gui.IGuiManager;
 import net.samagames.survivalapi.SurvivalAPI;
 import net.samagames.survivalapi.game.SurvivalGame;
 import net.samagames.survivalapi.game.types.SurvivalSoloGame;
@@ -11,6 +12,7 @@ import net.samagames.survivalapi.modules.block.HardObsidianModule;
 import net.samagames.survivalapi.modules.block.ParanoidModule;
 import net.samagames.survivalapi.modules.block.RandomChestModule;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,14 +20,14 @@ import java.util.*;
 
 public class UHCRandom extends JavaPlugin
 {
+    private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
 
     @Override
     public void onEnable()
     {
         SurvivalAPI api = SurvivalAPI.get();
-        List<RandomModule> modules = new ArrayList<>();
-        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(5)).getAsInt();
+        modules = new ArrayList<>();
         Random random = new Random();
 
         /** Modules list */
@@ -35,7 +37,9 @@ public class UHCRandom extends JavaPlugin
 
         /** Random modules selector */
         enabledModules = new ArrayList<>();
+        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(5)).getAsInt();
         modulesNumber = Math.min(modulesNumber, modules.size());
+        modulesNumber = Math.min(modulesNumber, 7);
         getLogger().info("Selecting " + modulesNumber + " modules.");
         for (int i = 0; i < modulesNumber; i++)
         {
@@ -77,7 +81,7 @@ public class UHCRandom extends JavaPlugin
                 }
             };
 
-        SurvivalAPI.get().unloadModule(RandomChestModule.class);
+        api.unloadModule(RandomChestModule.class);
 
         SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
         SamaGamesAPI.get().getGameManager().registerGame(game);
@@ -86,13 +90,15 @@ public class UHCRandom extends JavaPlugin
     /**
      * Show modules GUI to players.
      * Work in progress.
-     * @param callback
+     * @param callback callback which be called after display's end
      */
     public void displayModules(Runnable callback)
     {
-        getServer().broadcastMessage("Modules activés :");
-        for (RandomModule mod : enabledModules)
-            getServer().broadcastMessage(" - " + mod.getName());
-        callback.run();
+        new RandomGUI(this, modules, enabledModules, () -> {
+            getServer().broadcastMessage("Modules activés :");
+            for (RandomModule mod : enabledModules)
+                getServer().broadcastMessage(" - " + mod.getName() + " : " + mod.getDescription());
+            callback.run();
+        });
     }
 }
