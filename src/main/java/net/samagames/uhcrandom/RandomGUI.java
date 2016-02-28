@@ -21,19 +21,19 @@ public class RandomGUI extends AbstractGui
     private UHCRandom plugin;
     private int enabled;
 
-    private int[] delays = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 30, 0};
+    private int[] delays = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 30, 30};
     private int index;
 
-    public RandomGUI(UHCRandom plugin, Collection<RandomModule> allmodules, Collection<RandomModule> enabledModules, Runnable callback)
+    public RandomGUI(UHCRandom plugin, Collection<RandomModule> allModules, Collection<RandomModule> enabledModules, Runnable callback)
     {
         this.plugin = plugin;
         this.modules = new ArrayList<>();
         this.enabled = enabledModules.size();
-        Iterator<RandomModule> it = allmodules.iterator();
+        Iterator<RandomModule> it = allModules.iterator();
         for (int i = 0; i < this.delays.length; i++)
         {
             if (!it.hasNext())
-                it = allmodules.iterator();
+                it = allModules.iterator();
             if (it.hasNext())
                 this.modules.add(it.next());
         }
@@ -83,7 +83,10 @@ public class RandomGUI extends AbstractGui
         if (this.index < this.delays.length)
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::next, this.delays[this.index]);
         else
+        {
+            this.plugin.getServer().getOnlinePlayers().forEach(Player::closeInventory);
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this.callback::run, 60);
+        }
         this.index++;
     }
 }
