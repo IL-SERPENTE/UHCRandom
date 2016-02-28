@@ -19,14 +19,7 @@ public class UHCRandomGameLoop extends SurvivalGameLoop
     public void createWaitingBlockRemovingEvent()
     {
         this.nextEvent = new TimedEvent(0, 3, "Sélection des modules", ChatColor.GREEN, true,
-                () -> ((UHCRandom)this.plugin).displayModulesGUI(() ->
-                {
-                    this.nextEvent = new TimedEvent(0, 10, "Suppression des cages", ChatColor.GREEN, true, () ->
-                    {
-                        this.game.removeWaitingBlocks();
-                        this.createDamageEvent();
-                    });
-                })
+                () -> ((UHCRandom)this.plugin).displayModulesGUI(super::createWaitingBlockRemovingEvent)
         );
     }
 }
