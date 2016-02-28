@@ -11,7 +11,10 @@ import net.samagames.survivalapi.modules.combat.*;
 import net.samagames.survivalapi.modules.craft.*;
 import net.samagames.survivalapi.modules.entity.InfestationModule;
 import net.samagames.survivalapi.modules.gameplay.*;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
@@ -32,9 +35,9 @@ public class UHCRandom extends JavaPlugin
 
         /** Modules list */
         this.modules.add(new RandomModule(DiamondFlowerModule.class, null, "Les fleurs peuvent donner du diamant.", new ItemStack(Material.RED_ROSE)));
-        this.modules.add(new RandomModule(HardObsidianModule.class, null, "L'obsidienne est plus dure à casser (pioche en diamant uniquement).", new ItemStack(Material.OBSIDIAN)));
+        this.modules.add(new RandomModule(HardObsidianModule.class, null, "L'obsidienne ne peut être cassée qu'avec une pioche en diamant.", new ItemStack(Material.OBSIDIAN)));
         this.modules.add(new RandomModule(ParanoidModule.class, null, "Tout minage de diamant est annoncé aux autres joueurs.", new ItemStack(Material.DIAMOND_ORE)));
-        this.modules.add(new RandomModule(RapidOresModule.class, new RapidOresModule.ConfigurationBuilder().build(), "Le minage vous rapporte deux fois plus de ressources.", new ItemStack(Material.GOLD_PICKAXE)));
+        this.modules.add(new RandomModule(RapidOresModule.class, new RapidOresModule.ConfigurationBuilder().addDefaults().build(), "Le minage vous rapporte deux fois plus de ressources.", new ItemStack(Material.GOLD_PICKAXE)));
         this.modules.add(new RandomModule(TorchThanCoalModule.class, new TorchThanCoalModule.ConfigurationBuilder().build(), "Le charbon se transforme en torches.", new ItemStack(Material.TORCH)));
         this.modules.add(new RandomModule(AutomaticTNTModule.class, null, "La TNT s'active automatiquement lorsqu'elle est posée.", new ItemStack(Material.TNT)));
         this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL)));
@@ -45,8 +48,8 @@ public class UHCRandom extends JavaPlugin
         this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches au lieu d'une.", new ItemStack(Material.BOW)));
         this.modules.add(new RandomModule(DisableFlintAndSteelModule.class, null, "Vous ne pouvez plus fabriquer de briquet.", new ItemStack(Material.FLINT)));
         this.modules.add(new RandomModule(DisableLevelTwoPotionModule.class, null, "Les potions de niveau 2 sont désactivées.", new ItemStack(Material.POTION, 1, (short)8262)));
-        this.modules.add(new RandomModule(DisableNotchAppleModule.class, null, "Une pomme de Notch ? Késako ?", new ItemStack(Material.GOLDEN_APPLE, 1, (short)1)));
-        this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricale.", new ItemStack(Material.SPECKLED_MELON)));
+        this.modules.add(new RandomModule(DisableNotchAppleModule.class, null, "Les pommes de Notch ne peuvent pas être obtenues.", new ItemStack(Material.GOLDEN_APPLE, 1, (short)1)));
+        this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON)));
         this.modules.add(new RandomModule(OneWorkbenchModule.class, null, "Vous ne pouvez créer qu'une seule table de craft.", new ItemStack(Material.WORKBENCH)));
         this.modules.add(new RandomModule(RapidToolsModule.class, new RapidToolsModule.ConfigurationBuilder().setToolsMaterial(RapidToolsModule.ConfigurationBuilder.ToolMaterial.IRON).build(), "Vos outils sont plus puissants.", new ItemStack(Material.IRON_PICKAXE)));
         this.modules.add(new RandomModule(InfestationModule.class, null, "Chaque mob tué a 40% de chances de ré-apparaître.", new ItemStack(Material.MONSTER_EGG, 1, (short)54)));
@@ -59,7 +62,7 @@ public class UHCRandom extends JavaPlugin
         this.modules.add(new RandomModule(NineSlotsModule.class, null, "Votre inventaire n'a que 9 cases.", new ItemStack(Material.BARRIER)));
         this.modules.add(new RandomModule(PersonalBlocksModule.class, null, "Vos blocs seront protégés des autres joueurs.", new ItemStack(Material.BURNING_FURNACE)));
         this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez de la nourriture cuite sur les animaux.", new ItemStack(Material.COOKED_BEEF)));
-        this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Obtenez des éléments utils sur certains blocs.", new ItemStack(Material.GRAVEL)));
+        this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.GRAVEL)));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP)));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
 
@@ -74,7 +77,7 @@ public class UHCRandom extends JavaPlugin
         this.enabledModules = new ArrayList<>();
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(5)).getAsInt();
         modulesNumber = Math.min(modulesNumber, this.modules.size());
-        modulesNumber = Math.min(modulesNumber, 7); //GUI does not support more than 7 modules.
+        modulesNumber = Math.min(modulesNumber, 7); //GUI does not support more than 7 modules actually.
         getLogger().info("Selecting " + modulesNumber + " modules out of " + this.modules.size() + ".");
         for (int i = 0; i < modulesNumber; i++)
         {
@@ -90,21 +93,9 @@ public class UHCRandom extends JavaPlugin
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
         SurvivalGame game;
         if (nb > 1)
-            game = new SurvivalTeamGame<UHCRandomGameLoop>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class, nb){
-                @Override
-                public void startGame()
-                {
-                    displayModules(super::startGame);
-                }
-            };
+            game = new SurvivalTeamGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class, nb);
         else
-            game = new SurvivalSoloGame<UHCRandomGameLoop>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class){
-                @Override
-                public void startGame()
-                {
-                    displayModules(super::startGame);
-                }
-            };
+            game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class);
 
         api.unloadModule(RandomChestModule.class);
 
@@ -114,16 +105,40 @@ public class UHCRandom extends JavaPlugin
 
     /**
      * Show modules GUI to players.
-     * Work in progress.
      * @param callback callback which be called after display's end
      */
-    public void displayModules(Runnable callback)
+    public void displayModulesGUI(Runnable callback)
     {
         new RandomGUI(this, this.modules, this.enabledModules, () -> {
-            getServer().broadcastMessage("Modules activés :");
-            for (RandomModule mod : this.enabledModules)
-                getServer().broadcastMessage(" - " + mod.getName() + " : " + mod.getDescription());
+            getServer().getOnlinePlayers().forEach(this::displayModules);
             callback.run();
         });
+    }
+
+    /**
+     * Show modules in chat.
+     * @param player the player to display modules.
+     */
+    public void displayModules(CommandSender player)
+    {
+        player.sendMessage(ChatColor.GOLD + "Liste des modifications de cette partie :");
+        for (RandomModule mod : this.enabledModules)
+            player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + " + " + ChatColor.WHITE + mod.getDescription());
+    }
+
+    /**
+     * Handle /modules
+     * @param sender the one who send the command.
+     * @param command the command class.
+     * @param label the command name, here should always be "modules".
+     * @param args the arguments of the command, ignored here.
+     * @return In this case, always return true.
+     */
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+        if (label.equals("modules"))
+            displayModules(sender);
+        return true;
     }
 }

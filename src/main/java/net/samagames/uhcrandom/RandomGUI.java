@@ -4,6 +4,7 @@ import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.gui.AbstractGui;
 import net.samagames.api.gui.IGuiManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class RandomGUI extends AbstractGui
     private UHCRandom plugin;
     private int enabled;
 
-    private int[] delays = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 30, 30};
+    private int[] delays = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 10};
     private int index;
 
     public RandomGUI(UHCRandom plugin, Collection<RandomModule> allModules, Collection<RandomModule> enabledModules, Runnable callback)
@@ -68,7 +69,7 @@ public class RandomGUI extends AbstractGui
             else
             {
                 RandomModule module = this.modules.get(j);
-                this.setSlotData(module.getName(), module.getItem(), i, new String[]{module.getDescription()}, "");
+                this.setSlotData(ChatColor.BOLD + "" + ChatColor.AQUA + module.getName(), module.getItem(), i, new String[]{ChatColor.GRAY + module.getDescription()}, "");
                 j++;
             }
         }

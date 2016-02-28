@@ -6,3 +6,8 @@ depend: [SamaGamesAPI, SurvivalAPI]
 
 author: Rigner
 website: http://samagames.net/
+
+commands:
+    modules:
+        usage:
+        description: Displays current modules
