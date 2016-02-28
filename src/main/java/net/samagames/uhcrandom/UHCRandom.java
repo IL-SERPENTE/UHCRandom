@@ -38,7 +38,7 @@ public class UHCRandom extends JavaPlugin
         this.modules.add(new RandomModule(TorchThanCoalModule.class, new TorchThanCoalModule.ConfigurationBuilder().build(), "Le charbon se transforme en torches.", new ItemStack(Material.TORCH)));
         this.modules.add(new RandomModule(AutomaticTNTModule.class, null, "La TNT s'active automatiquement lorsqu'elle est posée.", new ItemStack(Material.TNT)));
         this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL)));
-        this.modules.add(new RandomModule(DropMyEffectsModule.class, new DropMyEffectsModule.ConfigurationBuilder().build(), "Les effets se transforment en potions à votre mort.", new ItemStack(Material.POTION, 1, (short)8201)));
+        this.modules.add(new RandomModule(DropMyEffectsModule.class, new DropMyEffectsModule.ConfigurationBuilder().blacklistPotionEffect(PotionEffectType.SPEED).build(), "Les effets se transforment en potions à votre mort.", new ItemStack(Material.POTION, 1, (short)8201)));
         this.modules.add(new RandomModule(KillForEnchantmentModule.class, null, "Les tables d'enchantement ne peuvent s'obtenir qu'en tuant vos ennemis.", new ItemStack(Material.ENCHANTMENT_TABLE)));
         this.modules.add(new RandomModule(KillToToggleTimeModule.class, null, "A chaque mort le temps change.", new ItemStack(Material.WATCH)));
         this.modules.add(new RandomModule(OneShootPassiveModule.class, null, "Les animaux meurent en un coup.", new ItemStack(Material.WOOD_SWORD)));
