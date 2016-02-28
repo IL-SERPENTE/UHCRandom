@@ -21,7 +21,7 @@ public class RandomGUI extends AbstractGui
     private UHCRandom plugin;
     private int enabled;
 
-    private int[] delays = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 30, 30};
+    private int[] delays = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 30, 30};
     private int index;
 
     public RandomGUI(UHCRandom plugin, Collection<RandomModule> allModules, Collection<RandomModule> enabledModules, Runnable callback)
@@ -43,6 +43,10 @@ public class RandomGUI extends AbstractGui
         this.next();
     }
 
+    /**
+     * Open inventory if not opened (first time or after close).
+     * @param player The player holding the inventory.
+     */
     public void display(Player player)
     {
         player.closeInventory();
@@ -83,10 +87,10 @@ public class RandomGUI extends AbstractGui
         if (this.index < this.delays.length)
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::next, this.delays[this.index]);
         else
-        {
-            this.plugin.getServer().getOnlinePlayers().forEach(Player::closeInventory);
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this.callback::run, 60);
-        }
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                this.plugin.getServer().getOnlinePlayers().forEach(Player::closeInventory);
+                this.callback.run();
+            }, 60);
         this.index++;
     }
 }
