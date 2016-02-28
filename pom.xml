@@ -40,12 +40,6 @@
             <artifactId>SamaGamesAPI</artifactId>
             <version>1.0.0</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.samagames</groupId>

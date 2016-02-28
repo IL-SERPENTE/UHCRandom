@@ -18,17 +18,15 @@ public class UHCRandomGameLoop extends SurvivalGameLoop
     @Override
     public void createWaitingBlockRemovingEvent()
     {
-        ((UHCRandom)this.plugin).displayModulesGUI(() -> {
-            this.nextEvent = new TimedEvent(0, 10, "Suppression des cages", ChatColor.GREEN, true, () ->
-            {
-                this.game.removeWaitingBlocks();
-                this.createDamageEvent();
-            });
-        });
+        this.nextEvent = new TimedEvent(0, 3, "Sélection des modules", ChatColor.GREEN, true,
+                () -> ((UHCRandom)this.plugin).displayModulesGUI(() ->
+                {
+                    this.nextEvent = new TimedEvent(0, 10, "Suppression des cages", ChatColor.GREEN, true, () ->
+                    {
+                        this.game.removeWaitingBlocks();
+                        this.createDamageEvent();
+                    });
+                })
+        );
     }
-
-    /**
-     * Will contain function to open Moodules GUI, after teleport.
-     * Waiting for BlueSlime work about it.
-     */
 }
