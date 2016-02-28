@@ -5,20 +5,23 @@ import net.samagames.api.gui.AbstractGui;
 import net.samagames.api.gui.IGuiManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
 public class RandomGUI extends AbstractGui
 {
+    public static String INV_NAME = "UHCRandom";
+
     private List<RandomModule> modules;
     private Runnable callback;
     private UHCRandom plugin;
     private int enabled;
 
-    private int[] delays = new int[]{1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 6, 8, 12, 14, 18, 22, 26, 30, 35, 40, 40};
+    private int[] delays = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 30, 0};
     private int index;
 
     public RandomGUI(UHCRandom plugin, Collection<RandomModule> allmodules, Collection<RandomModule> enabledModules, Runnable callback)
@@ -46,29 +49,41 @@ public class RandomGUI extends AbstractGui
         player.openInventory(this.inventory);
     }
 
+    /**
+     * Generates next inventory, with random glass colors (without light grey), and modules icons.
+     */
     private void next()
     {
         Random random = new Random();
-        this.inventory = Bukkit.createInventory(null, 27, "UHCRandom");
+        this.inventory = Bukkit.createInventory(null, 27, INV_NAME);
+        int j = 0;
         for (int i = 0; i < 27; i++)
         {
             if (i < 13 - (this.enabled / 2) || i > 13 + (this.enabled / 2))
                 this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte)random.nextInt(16)), i, null, "");
             else
             {
-                RandomModule module = this.modules.get(0);
+                RandomModule module = this.modules.get(j);
                 this.setSlotData(module.getName(), module.getItem(), i, new String[]{module.getDescription()}, "");
-                this.modules.add(module);
+                j++;
             }
         }
+        this.modules.remove(0);
         IGuiManager manager = SamaGamesAPI.get().getGuiManager();
         if (manager != null)
             for (Player player : plugin.getServer().getOnlinePlayers())
-                manager.openGui(player, this);
+            {
+                player.playSound(player.getLocation(), this.index < this.delays.length ? Sound.ORB_PICKUP : Sound.LEVEL_UP, 1F, 1F);
+                InventoryView view = player.getOpenInventory();
+                if (view == null || view.getTopInventory() == null || !view.getTopInventory().getName().equals(INV_NAME))
+                    manager.openGui(player, this);
+                else
+                    view.getTopInventory().setContents(this.inventory.getContents());
+            }
         if (this.index < this.delays.length)
-            plugin.getServer().getScheduler().runTaskLater(plugin, this::next, this.delays[this.index]);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::next, this.delays[this.index]);
         else
-            callback.run();
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this.callback::run, 60);
         this.index++;
     }
 }

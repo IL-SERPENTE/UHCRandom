@@ -10,13 +10,17 @@ public class RandomModule
     private Class<? extends AbstractSurvivalModule> moduleclass;
     private Map<String, Object> config;
     private String name;
+    private String description;
     private ItemStack item;
 
-    public RandomModule(Class<? extends AbstractSurvivalModule> moduleclass, Map<String, Object> config, String name, ItemStack item)
+    public RandomModule(Class<? extends AbstractSurvivalModule> moduleclass, Map<String, Object> config, String description, ItemStack item)
     {
         this.moduleclass = moduleclass;
         this.config = config;
-        this.name = name;
+        this.name = this.moduleclass.getCanonicalName().substring(
+                this.moduleclass.getCanonicalName().lastIndexOf('.') + 1,
+                this.moduleclass.getCanonicalName().indexOf("Module"));
+        this.description = description;
         this.item = item;
     }
 
@@ -32,12 +36,12 @@ public class RandomModule
 
     public String getName()
     {
-        return this.moduleclass.getName().substring(0, this.moduleclass.getName().indexOf("Module"));
+        return this.name;
     }
 
     public String getDescription()
     {
-        return this.name;
+        return this.description;
     }
 
     public ItemStack getItem()
