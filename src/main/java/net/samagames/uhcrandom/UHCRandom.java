@@ -9,12 +9,14 @@ import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.modules.block.*;
 import net.samagames.survivalapi.modules.combat.*;
 import net.samagames.survivalapi.modules.craft.*;
+import net.samagames.survivalapi.modules.entity.EntityDropModule;
 import net.samagames.survivalapi.modules.entity.InfestationModule;
 import net.samagames.survivalapi.modules.gameplay.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
@@ -56,7 +58,7 @@ public class UHCRandom extends JavaPlugin
         this.modules.add(new RandomModule(AutomaticLapisModule.class, null, "Les tables d'enchantement n'ont pas besoin de lapis.", new ItemStack(Material.INK_SACK, 1, (short)4)));
         this.modules.add(new RandomModule(BloodDiamondModule.class, new BloodDiamondModule.ConfigurationBuilder().build(), "Chaque diamant miné vous ôtera un demi-coeur.", new ItemStack(Material.DIAMOND)));
         this.modules.add(new RandomModule(CatsEyesModule.class, null, "Vous voyez dans l'obscurité tel un chat.", new ItemStack(Material.EYE_OF_ENDER)));
-        this.modules.add(new RandomModule(ConstantPotionModule.class, new ConstantPotionModule.ConfigurationBuilder().addPotionEffect(PotionEffectType.SPEED, 1).build(), "Votre vitesse est augmentée.", new ItemStack(Material.FEATHER)));
+        this.modules.add(new RandomModule(ConstantPotionModule.class, new ConstantPotionModule.ConfigurationBuilder().addPotionEffect(PotionEffectType.SPEED, 1).build(), "Votre vitesse est augmentée.", new ItemStack(Material.POTION, 1, (short)8194)));
         this.modules.add(new RandomModule(DoubleHealthModule.class, null, "Votre vie est doublée.", new ItemStack(Material.POTION, 1, (short)8229)));
         this.modules.add(new RandomModule(FastTreeModule.class, null, "Les arbres se cassent en un coup.", new ItemStack(Material.DIAMOND_AXE)));
         this.modules.add(new RandomModule(NineSlotsModule.class, null, "Votre inventaire n'a que 9 cases.", new ItemStack(Material.BARRIER)));
@@ -65,12 +67,11 @@ public class UHCRandom extends JavaPlugin
         this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.GRAVEL)));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP)));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
+        this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER)));
 
         //StackableItemModule > Need explanations
         //RapidStackingModule > How to describe ?
-        //EntityDropModule > Config ?
         //DropMyEffectsModule > Config ?
-        //LoveMachineModule > Useless here ?
 
         /** Random modules selector */
         Collections.shuffle(this.modules);
