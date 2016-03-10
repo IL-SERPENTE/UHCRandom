@@ -97,7 +97,7 @@ public class UHCRandom extends JavaPlugin
         }
         getLogger().info("Random modules selected");
 
-        /** Solo or team game, depending on config, and overriding of startGame function to display modules (will me moved to GameLoop later) */
+        /** Solo or team game, depending on config */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
         SurvivalGame game;
         if (nb > 1)
