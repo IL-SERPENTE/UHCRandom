@@ -27,6 +27,7 @@ public class UHCRandom extends JavaPlugin
 {
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
+    private RandomGUI gui;
 
     @Override
     public void onEnable()
@@ -117,7 +118,7 @@ public class UHCRandom extends JavaPlugin
      */
     public void displayModulesGUI(Runnable callback)
     {
-        new RandomGUI(this, this.modules, this.enabledModules, () -> {
+        this.gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
             getServer().getOnlinePlayers().forEach(this::displayModules);
             callback.run();
         });
@@ -145,8 +146,17 @@ public class UHCRandom extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (label.equals("modules"))
+        if ("modules".equals(label))
             displayModules(sender);
         return true;
+    }
+
+    /**
+     * Returns the Current GUI
+     * @return GUI
+     */
+    public RandomGUI getGUI()
+    {
+        return this.gui;
     }
 }

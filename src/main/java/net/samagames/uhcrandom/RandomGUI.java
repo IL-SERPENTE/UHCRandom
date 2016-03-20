@@ -15,7 +15,7 @@ import java.util.*;
 
 public class RandomGUI extends AbstractGui
 {
-    public static String INV_NAME = "UHCRandom";
+    public static final String INVNAME = "UHCRandom";
 
     private List<RandomModule> modules;
     private Runnable callback;
@@ -23,6 +23,7 @@ public class RandomGUI extends AbstractGui
     private int enabled;
 
     private int[] delays = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 10};
+    private short[] colors = new short[]{0, 1, 2, 3, 4, 5, 6};
     private int index;
 
     public RandomGUI(UHCRandom plugin, Collection<RandomModule> allModules, Collection<RandomModule> enabledModules, Runnable callback)
@@ -48,6 +49,7 @@ public class RandomGUI extends AbstractGui
      * Open inventory if not opened (first time or after close).
      * @param player The player holding the inventory.
      */
+    @Override
     public void display(Player player)
     {
         player.closeInventory();
@@ -60,12 +62,12 @@ public class RandomGUI extends AbstractGui
     private void next()
     {
         Random random = new Random();
-        this.inventory = Bukkit.createInventory(null, 27, INV_NAME);
+        this.inventory = Bukkit.createInventory(null, 27, INVNAME);
         int j = 0;
         for (int i = 0; i < 27; i++)
         {
             if (i < 13 - (this.enabled / 2) || i > 13 + (this.enabled / 2))
-                this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte)random.nextInt(16)), i, null, "");
+                this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, colors[random.nextInt(colors.length)]), i, null, "");
             else
             {
                 RandomModule module = this.modules.get(j);
@@ -75,16 +77,15 @@ public class RandomGUI extends AbstractGui
         }
         this.modules.remove(0);
         IGuiManager manager = SamaGamesAPI.get().getGuiManager();
-        if (manager != null)
-            for (Player player : plugin.getServer().getOnlinePlayers())
-            {
-                player.playSound(player.getLocation(), this.index < this.delays.length ? Sound.ORB_PICKUP : Sound.LEVEL_UP, 1F, 1F);
-                InventoryView view = player.getOpenInventory();
-                if (view == null || view.getTopInventory() == null || !view.getTopInventory().getName().equals(INV_NAME))
-                    manager.openGui(player, this);
-                else
-                    view.getTopInventory().setContents(this.inventory.getContents());
-            }
+        for (Player player : plugin.getServer().getOnlinePlayers())
+        {
+            player.playSound(player.getLocation(), this.index < this.delays.length ? Sound.ORB_PICKUP : Sound.LEVEL_UP, 1F, 1F);
+            InventoryView view = player.getOpenInventory();
+            if (view == null || view.getTopInventory() == null || !view.getTopInventory().getName().equals(INVNAME))
+                manager.openGui(player, this);
+            else
+                view.getTopInventory().setContents(this.inventory.getContents());
+        }
         if (this.index < this.delays.length)
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::next, this.delays[this.index]);
         else
