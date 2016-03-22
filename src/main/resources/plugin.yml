@@ -11,3 +11,4 @@ commands:
     modules:
         usage:
         description: Displays current modules
+        aliases: [module]

@@ -92,7 +92,7 @@ public class RandomGUI extends AbstractGui
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
                 this.plugin.getServer().getOnlinePlayers().forEach(Player::closeInventory);
                 this.callback.run();
-            }, 60);
+            }, 240);
         this.index++;
     }
 }
