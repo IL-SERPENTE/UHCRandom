@@ -18,7 +18,7 @@ public class RandomGUI extends AbstractGui
     public static final String INVNAME = "UHCRandom";
 
     private List<RandomModule> modules;
-    private Runnable callback;
+    private Callback callback;
     private UHCRandom plugin;
     private int enabled;
 
@@ -26,7 +26,7 @@ public class RandomGUI extends AbstractGui
     private short[] colors = new short[]{0, 1, 2, 3, 4, 5, 6};
     private int index;
 
-    public RandomGUI(UHCRandom plugin, Collection<RandomModule> allModules, Collection<RandomModule> enabledModules, Runnable callback)
+    public RandomGUI(UHCRandom plugin, Collection<RandomModule> allModules, Collection<RandomModule> enabledModules, Callback callback)
     {
         this.plugin = plugin;
         this.modules = new ArrayList<>();

@@ -116,7 +116,7 @@ public class UHCRandom extends JavaPlugin
      * Show modules GUI to players.
      * @param callback callback which be called after display's end
      */
-    public void displayModulesGUI(Runnable callback)
+    public void displayModulesGUI(Callback callback)
     {
         this.gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
             getServer().getOnlinePlayers().forEach(this::displayModules);
