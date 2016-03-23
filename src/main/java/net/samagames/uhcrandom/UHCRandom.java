@@ -17,13 +17,16 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-public class UHCRandom extends JavaPlugin
+public class UHCRandom extends JavaPlugin implements Listener
 {
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
@@ -112,6 +115,7 @@ public class UHCRandom extends JavaPlugin
 
         SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
         SamaGamesAPI.get().getGameManager().registerGame(game);
+        getServer().getPluginManager().registerEvents(this, this);
     }
 
     /**
@@ -160,5 +164,16 @@ public class UHCRandom extends JavaPlugin
     public RandomGUI getGUI()
     {
         return this.gui;
+    }
+
+    /**
+     * Cancel click on RandomGUI
+     * @param event The Event to be cancelled
+     */
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event)
+    {
+        if (event.getClickedInventory() != null && event.getClickedInventory().getName().equals(RandomGUI.INVNAME))
+            event.setCancelled(true);
     }
 }
