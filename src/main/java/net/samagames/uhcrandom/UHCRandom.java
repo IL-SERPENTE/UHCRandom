@@ -51,7 +51,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(KillForEnchantmentModule.class, null, "Les tables d'enchantement ne peuvent s'obtenir qu'en tuant vos ennemis.", new ItemStack(Material.ENCHANTMENT_TABLE)));
         this.modules.add(new RandomModule(KillToToggleTimeModule.class, null, "A chaque mort l'heure change.", new ItemStack(Material.WATCH)));
         this.modules.add(new RandomModule(OneShootPassiveModule.class, null, "Les animaux meurent en un coup.", new ItemStack(Material.WOOD_SWORD)));
-        this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches au lieu d'une.", new ItemStack(Material.BOW)));
+        //this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches au lieu d'une.", new ItemStack(Material.BOW)));
         this.modules.add(new RandomModule(DisableFlintAndSteelModule.class, null, "Vous ne pouvez plus fabriquer de briquet.", new ItemStack(Material.FLINT)));
         this.modules.add(new RandomModule(DisableLevelTwoPotionModule.class, null, "Les potions de niveau 2 sont désactivées.", new ItemStack(Material.POTION, 1, (short)8262)));
         this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON)));
