@@ -4,6 +4,8 @@ version: 1.0
 
 depend: [SamaGamesAPI, SurvivalAPI]
 
+load: STARTUP
+
 author: Rigner
 website: http://samagames.net/
 
