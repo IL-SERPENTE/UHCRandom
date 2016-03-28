@@ -85,6 +85,7 @@ public class UHCRandom extends JavaPlugin implements Listener
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
+        api.loadModule(LoveMachineModule.class, null);
 
         /** Random modules selector */
         Collections.shuffle(this.modules);
