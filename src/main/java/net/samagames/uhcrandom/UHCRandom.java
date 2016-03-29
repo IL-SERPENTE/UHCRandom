@@ -12,11 +12,13 @@ import net.samagames.survivalapi.modules.craft.*;
 import net.samagames.survivalapi.modules.entity.EntityDropModule;
 import net.samagames.survivalapi.modules.entity.InfestationModule;
 import net.samagames.survivalapi.modules.gameplay.*;
+import net.samagames.tools.chat.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -140,6 +142,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         player.sendMessage(ChatColor.GOLD + "Liste des modifications de cette partie :");
         for (RandomModule mod : this.enabledModules)
             player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + " + " + ChatColor.WHITE + mod.getDescription());
+        if (player instanceof Player)
+            new FancyMessage("Vous voulez revoir les modifications ? Cliquez ").color(ChatColor.GOLD).then("[ICI]").command("/modules").color(ChatColor.AQUA).style(ChatColor.BOLD).then(" ou tapez /modules dans le chat.").color(ChatColor.GOLD).send((Player)player);
     }
 
     /**
