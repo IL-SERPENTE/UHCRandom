@@ -33,12 +33,14 @@ public class UHCRandom extends JavaPlugin implements Listener
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
     private RandomGUI gui;
+    private boolean started;
 
     @Override
     public void onEnable()
     {
         SurvivalAPI api = SurvivalAPI.get();
         this.modules = new ArrayList<>();
+        this.started = false;
         Random random = new Random();
 
         /** Modules list */
@@ -134,6 +136,7 @@ public class UHCRandom extends JavaPlugin implements Listener
     {
         this.gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
             getServer().getOnlinePlayers().forEach(this::displayModules);
+            this.started = true;
             callback.run();
         });
     }
@@ -163,7 +166,12 @@ public class UHCRandom extends JavaPlugin implements Listener
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if ("modules".equals(label) || "module".equals(label))
-            displayModules(sender);
+        {
+            if (started)
+                displayModules(sender);
+            else
+                sender.sendMessage(ChatColor.RED + "La partie n'a pas encore démarré.");
+        }
         return true;
     }
 
