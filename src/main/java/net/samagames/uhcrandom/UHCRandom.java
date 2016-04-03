@@ -12,7 +12,7 @@ import net.samagames.survivalapi.modules.craft.*;
 import net.samagames.survivalapi.modules.entity.EntityDropModule;
 import net.samagames.survivalapi.modules.entity.InfestationModule;
 import net.samagames.survivalapi.modules.gameplay.*;
-import net.samagames.tools.chat.FancyMessage;
+import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
