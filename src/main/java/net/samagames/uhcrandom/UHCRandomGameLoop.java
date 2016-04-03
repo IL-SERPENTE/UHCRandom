@@ -18,8 +18,10 @@ public class UHCRandomGameLoop extends SurvivalGameLoop
     @Override
     public void createWaitingBlockRemovingEvent()
     {
-        this.nextEvent = new TimedEvent(0, 3, "Sélection des modules", ChatColor.GREEN, true,
-                () -> ((UHCRandom)this.plugin).displayModulesGUI(super::createWaitingBlockRemovingEvent)
+        this.nextEvent = new TimedEvent(0, 3, "Sélection des modules", ChatColor.GREEN, true, () -> {
+                    this.nextEvent = null;
+                    ((UHCRandom)this.plugin).displayModulesGUI(super::createWaitingBlockRemovingEvent);
+                }
         );
     }
 }
