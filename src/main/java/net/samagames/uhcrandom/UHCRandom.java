@@ -162,7 +162,7 @@ public class UHCRandom extends JavaPlugin implements Listener
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if ("modules".equals(label))
+        if ("modules".equals(label) || "module".equals(label))
             displayModules(sender);
         return true;
     }
