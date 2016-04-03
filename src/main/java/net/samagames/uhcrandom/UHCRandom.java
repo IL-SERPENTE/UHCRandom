@@ -75,7 +75,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP)));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
         this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER)));
-        this.modules.add(new RandomModule(LightsOutModule.class, null, "Vous ne pouvez pas poser de torches.", new ItemStack(Material.TORCH)));
+        this.modules.add(new RandomModule(LightsOutModule.class, null, "Vous ne pouvez pas poser de torches.", new ItemStack(Material.REDSTONE_TORCH_ON)));
         this.modules.add(new RandomModule(CocoaEffectsModule.class, null, "Vous avez 5 graines de cacao vous donnant des effets.", new ItemStack(Material.INK_SACK, 1, (short)3)));
         this.modules.add(new RandomModule(EveryRoseModule.class, null, "Vous obtenez un plastron en or Thorns III.", new ItemStack(Material.GOLD_CHESTPLATE)));
         this.modules.add(new RandomModule(GoneFishingModule.class, null, "Vous obtenez une canne à pêche très efficace.", new ItemStack(Material.FISHING_ROD)));
@@ -85,7 +85,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(NoSwordModule.class, null, "Vous ne pouvez plus créer d'épée.", new ItemStack(Material.STONE_SWORD)));
         this.modules.add(new RandomModule(TheHobbitModule.class, null, "Utilisez la puissance de l'anneau pour vous rendre invisibles.", new ItemStack(Material.GOLD_NUGGET)));
         this.modules.add(new RandomModule(PopeyeModule.class, null, "Mangez des épinards, c'est bon pour la santé.", new ItemStack(Material.INK_SACK, 1, (short)2)));
-        this.modules.add(new RandomModule(PyroTechnicsModule.class, null, "Chaque dégats vous emflammera.", new ItemStack(Material.FIRE)));
+        this.modules.add(new RandomModule(PyroTechnicsModule.class, null, "Chaque dégats vous emflammera.", new ItemStack(Material.LAVA_BUCKET)));
         this.modules.add(new RandomModule(PuppyPowerModule.class, null, "Devenez dresseur de loups !", new ItemStack(Material.MONSTER_EGG, 1, (short)95)));
 
         //StackableItemModule > Need explanations
