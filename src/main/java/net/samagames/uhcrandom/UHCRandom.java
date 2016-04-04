@@ -181,7 +181,7 @@ public class UHCRandom extends JavaPlugin implements Listener
                     if (module.getName().equalsIgnoreCase(args[0]))
                     {
                         SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
-                        sender.sendMessage(ChatColor.GREEN + "Module " + module.getItem() + " chargé.");
+                        sender.sendMessage(ChatColor.GREEN + "Module " + module.getName() + " chargé.");
                         return true;
                     }
                 }
