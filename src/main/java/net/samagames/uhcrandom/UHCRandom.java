@@ -172,6 +172,24 @@ public class UHCRandom extends JavaPlugin implements Listener
             else
                 sender.sendMessage(ChatColor.RED + "La partie n'a pas encore démarré.");
         }
+        else if ("enablemodule".equals(label) && sender.hasPermission("uhcrandom.enablemodule") && args.length == 1)
+        {
+            if (!started)
+            {
+                for (RandomModule module : this.modules)
+                {
+                    if (module.getName().equalsIgnoreCase(args[0]))
+                    {
+                        SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
+                        sender.sendMessage(ChatColor.GREEN + "Module " + module.getItem() + " chargé.");
+                        return true;
+                    }
+                }
+                sender.sendMessage(ChatColor.RED + "Module non trouvé.");
+            }
+            else
+                sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
+        }
         return true;
     }
 
