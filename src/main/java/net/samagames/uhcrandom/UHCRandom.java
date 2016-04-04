@@ -87,6 +87,9 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(PopeyeModule.class, null, "Mangez des épinards, c'est bon pour la santé.", new ItemStack(Material.INK_SACK, 1, (short)2)));
         this.modules.add(new RandomModule(PyroTechnicsModule.class, null, "Chaque dégats vous emflammera.", new ItemStack(Material.LAVA_BUCKET)));
         this.modules.add(new RandomModule(PuppyPowerModule.class, null, "Devenez dresseur de loups !", new ItemStack(Material.MONSTER_EGG, 1, (short)95)));
+        this.modules.add(new RandomModule(ChickenModule.class, null, "Vous commencez avec 1 coeur et demi et une pomme de Notch.", new ItemStack(Material.RAW_CHICKEN)));
+        this.modules.add(new RandomModule(GapZapModule.class, null, "Vous perdez votre regénération si vous prenez du dégat.", new ItemStack(Material.POTION, 1, (short)8193)));
+        this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
 
         //StackableItemModule > Need explanations
         //RapidStackingModule > How to describe ?
