@@ -92,12 +92,16 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(ChickenModule.class, null, "Vous commencez avec 1 coeur et demi et une pomme de Notch.", new ItemStack(Material.RAW_CHICKEN)));
         this.modules.add(new RandomModule(GapZapModule.class, null, "Vous perdez votre regénération si vous prenez du dégat.", new ItemStack(Material.POTION, 1, (short)8193)));
         this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
+        this.modules.add(new RandomModule(SuperheroesModule.class, null, "Vous devenez un super-héros.", new ItemStack(Material.BANNER, 1, (short)1)));
+        this.modules.add(new RandomModule(SuperheroesPlusModule.class, null, "Vous devenez plus fort qu'un super-héros.", new ItemStack(Material.BANNER, 1, (short)0)));
 
+        /** Incomatibles modules list */
         this.incompatibleModules.add(new IncompatibleModulePair(ChickenModule.class, DoubleHealthModule.class));
-
-        //StackableItemModule > Need explanations
-        //RapidStackingModule > How to describe ?
-        //DropMyEffectsModule > Config ?
+        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, SuperheroesPlusModule.class));
+        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, ChickenModule.class));
+        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, DoubleHealthModule.class));
+        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesPlusModule.class, ChickenModule.class));
+        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesPlusModule.class, DoubleHealthModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
