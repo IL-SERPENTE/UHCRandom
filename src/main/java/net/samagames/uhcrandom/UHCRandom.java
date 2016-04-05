@@ -11,6 +11,8 @@ import net.samagames.survivalapi.modules.combat.*;
 import net.samagames.survivalapi.modules.craft.*;
 import net.samagames.survivalapi.modules.entity.EntityDropModule;
 import net.samagames.survivalapi.modules.entity.InfestationModule;
+import net.samagames.survivalapi.modules.entity.VengefulSpiritsModule;
+import net.samagames.survivalapi.modules.entity.ZombiesModule;
 import net.samagames.survivalapi.modules.gameplay.*;
 import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
@@ -94,14 +96,18 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
         this.modules.add(new RandomModule(SuperheroesModule.class, null, "Vous devenez un super-héros.", new ItemStack(Material.BANNER, 1, (short)1)));
         this.modules.add(new RandomModule(SuperheroesPlusModule.class, null, "Vous devenez plus fort qu'un super-héros.", new ItemStack(Material.BANNER, 1, (short)0)));
+        this.modules.add(new RandomModule(SpeedSwapModule.class, null, "A chaque mort, un effet de vitesse ou de lenteur sera donné.", new ItemStack(Material.POTION, 1, (short)16450)));
+        this.modules.add(new RandomModule(VengefulSpiritsModule.class, null, "Un ghast ou un blaze apparait à chaque mort de joueur.", new ItemStack(Material.GHAST_TEAR)));
+        this.modules.add(new RandomModule(ZombiesModule.class, null, "Vous devenez un zombie à votre mort.", new ItemStack(Material.MONSTER_EGG, 1, (short)54)));
 
-        /** Incomatibles modules list */
+        /** Incompatibles modules list */
         this.incompatibleModules.add(new IncompatibleModulePair(ChickenModule.class, DoubleHealthModule.class));
         this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, SuperheroesPlusModule.class));
         this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, ChickenModule.class));
         this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, DoubleHealthModule.class));
         this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesPlusModule.class, ChickenModule.class));
         this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesPlusModule.class, DoubleHealthModule.class));
+        this.incompatibleModules.add(new IncompatibleModulePair(VengefulSpiritsModule.class, ZombiesModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
