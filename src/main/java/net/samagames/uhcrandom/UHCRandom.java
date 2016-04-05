@@ -41,6 +41,7 @@ public class UHCRandom extends JavaPlugin implements Listener
     {
         SurvivalAPI api = SurvivalAPI.get();
         this.modules = new ArrayList<>();
+        this.incompatibleModules = new ArrayList<>();
         this.started = false;
         Random random = new Random();
 
