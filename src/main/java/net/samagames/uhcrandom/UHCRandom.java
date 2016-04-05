@@ -171,7 +171,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         for (RandomModule mod : this.enabledModules)
             player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + " + " + ChatColor.WHITE + mod.getDescription());
         if (player instanceof Player)
-            new FancyMessage("Cliquez ").color(ChatColor.GOLD).then("[ICI]").command("/modules").color(ChatColor.AQUA).style(ChatColor.BOLD).then(" ou tapez /modules dans le chat pour revoir cette liste.").color(ChatColor.GOLD).send((Player)player);
+            new FancyMessage("Tapez ").color(ChatColor.GOLD).then("/modules").command("/modules").color(ChatColor.AQUA).style(ChatColor.BOLD).then(" dans le chat pour revoir cette liste.").color(ChatColor.GOLD).send((Player)player);
     }
 
     /**
