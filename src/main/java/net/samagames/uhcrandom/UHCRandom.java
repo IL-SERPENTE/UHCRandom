@@ -32,6 +32,7 @@ public class UHCRandom extends JavaPlugin implements Listener
 {
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
+    private List<IncompatibleModulePair> incompatibleModules;
     private RandomGUI gui;
     private boolean started;
 
@@ -91,6 +92,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(GapZapModule.class, null, "Vous perdez votre regénération si vous prenez du dégat.", new ItemStack(Material.POTION, 1, (short)8193)));
         this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
 
+        this.incompatibleModules.add(new IncompatibleModulePair(ChickenModule.class, DoubleHealthModule.class));
+
         //StackableItemModule > Need explanations
         //RapidStackingModule > How to describe ?
         //DropMyEffectsModule > Config ?
@@ -110,9 +113,22 @@ public class UHCRandom extends JavaPlugin implements Listener
         {
             int rand = random.nextInt(this.modules.size());
             RandomModule entry = this.modules.get(rand);
-            api.loadModule(entry.getModuleClass(), entry.getConfig());
-            this.enabledModules.add(entry);
-            this.modules.remove(entry);
+            boolean ok = true;
+            for (IncompatibleModulePair pair : this.incompatibleModules)
+                if (pair.first.equals(entry.getModuleClass()) || pair.second.equals(entry.getModuleClass()))
+                {
+                    for (RandomModule module : this.enabledModules)
+                        if (pair.first.equals(module.getModuleClass()) || pair.second.equals(module.getModuleClass()))
+                            ok = false;
+                }
+            if (ok)
+            {
+                api.loadModule(entry.getModuleClass(), entry.getConfig());
+                this.enabledModules.add(entry);
+                this.modules.remove(entry);
+            }
+            else
+                i--;
         }
         getLogger().info("Random modules selected");
 
@@ -179,12 +195,28 @@ public class UHCRandom extends JavaPlugin implements Listener
         {
             if (!started)
             {
-                for (RandomModule module : this.modules)
+                for (Iterator<RandomModule> it = this.modules.iterator(); it.hasNext();)
                 {
+                    RandomModule module = it.next();
                     if (module.getName().equalsIgnoreCase(args[0]))
                     {
-                        SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
-                        sender.sendMessage(ChatColor.GREEN + "Module " + module.getName() + " chargé.");
+                        boolean ok = true;
+                        for (IncompatibleModulePair pair : this.incompatibleModules)
+                            if (pair.first.equals(module.getModuleClass()) || pair.second.equals(module.getModuleClass()))
+                            {
+                                for (RandomModule module2 : this.enabledModules)
+                                    if (pair.first.equals(module2.getModuleClass()) || pair.second.equals(module2.getModuleClass()))
+                                        ok = false;
+                            }
+                        if (ok)
+                        {
+                            SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
+                            this.enabledModules.add(module);
+                            it.remove();
+                            sender.sendMessage(ChatColor.GREEN + "Module " + module.getName() + " chargé.");
+                        }
+                        else
+                            sender.sendMessage("Module incompatible avec un module déjà présent.");
                         return true;
                     }
                 }
