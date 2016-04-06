@@ -9,10 +9,7 @@ import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.modules.block.*;
 import net.samagames.survivalapi.modules.combat.*;
 import net.samagames.survivalapi.modules.craft.*;
-import net.samagames.survivalapi.modules.entity.EntityDropModule;
-import net.samagames.survivalapi.modules.entity.InfestationModule;
-import net.samagames.survivalapi.modules.entity.VengefulSpiritsModule;
-import net.samagames.survivalapi.modules.entity.ZombiesModule;
+import net.samagames.survivalapi.modules.entity.*;
 import net.samagames.survivalapi.modules.gameplay.*;
 import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
@@ -99,6 +96,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(SpeedSwapModule.class, null, "A chaque mort, un effet de vitesse ou de lenteur sera donné.", new ItemStack(Material.POTION, 1, (short)16450)));
         this.modules.add(new RandomModule(VengefulSpiritsModule.class, null, "Un ghast ou un blaze apparait à chaque mort de joueur.", new ItemStack(Material.GHAST_TEAR)));
         this.modules.add(new RandomModule(ZombiesModule.class, null, "Vous devenez un zombie à votre mort.", new ItemStack(Material.MONSTER_EGG, 1, (short)54)));
+        this.modules.add(new RandomModule(KillSwitchModule.class, null, "Quand vous tuez un joueur, vous prenez son inventaire.", new ItemStack(Material.TRAPPED_CHEST)));
+        this.modules.add(new RandomModule(MobOresModule.class, null, "Chaque minerai miné peut faire apparaitre un monstre.", new ItemStack(Material.IRON_ORE)));
 
         /** Incompatibles modules list */
         this.incompatibleModules.add(new IncompatibleModulePair(ChickenModule.class, DoubleHealthModule.class));
