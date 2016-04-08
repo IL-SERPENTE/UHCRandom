@@ -99,7 +99,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(MobOresModule.class, null, "Chaque minerai miné peut faire apparaitre un monstre.", new ItemStack(Material.IRON_ORE)));
         this.modules.add(new RandomModule(OneHealModule.class, null, "Vous obtenez une houe vous permettant de vous soigner.", new ItemStack(Material.GOLD_HOE)));
         this.modules.add(new RandomModule(PotentialHeartsModule.class, null, "Vous avez 20 coeurs maximum, mais seulement 10 au départ.", new ItemStack(Material.POTION, 1, (short)8257)));
-        this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échanger votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
+        this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échangez votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(InventorsModule.class, null, "Le premier craft de la partie est annoncé.", new ItemStack(Material.STICK)));
 
         /** Incompatibles modules list */
