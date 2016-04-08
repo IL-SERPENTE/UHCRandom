@@ -31,7 +31,7 @@ public class UHCRandom extends JavaPlugin implements Listener
 {
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
-    private List<IncompatibleModulePair> incompatibleModules;
+    private List<IncompatibleModules> incompatibleModules;
     private RandomGUI gui;
     private boolean started;
 
@@ -100,13 +100,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(MobOresModule.class, null, "Chaque minerai miné peut faire apparaitre un monstre.", new ItemStack(Material.IRON_ORE)));
 
         /** Incompatibles modules list */
-        this.incompatibleModules.add(new IncompatibleModulePair(ChickenModule.class, DoubleHealthModule.class));
-        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, SuperheroesPlusModule.class));
-        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, ChickenModule.class));
-        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesModule.class, DoubleHealthModule.class));
-        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesPlusModule.class, ChickenModule.class));
-        this.incompatibleModules.add(new IncompatibleModulePair(SuperheroesPlusModule.class, DoubleHealthModule.class));
-        this.incompatibleModules.add(new IncompatibleModulePair(VengefulSpiritsModule.class, ZombiesModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(ChickenModule.class, DoubleHealthModule.class, SuperheroesModule.class, SuperheroesPlusModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(VengefulSpiritsModule.class, ZombiesModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
@@ -124,13 +119,9 @@ public class UHCRandom extends JavaPlugin implements Listener
             int rand = random.nextInt(this.modules.size());
             RandomModule entry = this.modules.get(rand);
             boolean ok = true;
-            for (IncompatibleModulePair pair : this.incompatibleModules)
-                if (pair.first.equals(entry.getModuleClass()) || pair.second.equals(entry.getModuleClass()))
-                {
-                    for (RandomModule module : this.enabledModules)
-                        if (pair.first.equals(module.getModuleClass()) || pair.second.equals(module.getModuleClass()))
-                            ok = false;
-                }
+            for (RandomModule module : this.enabledModules)
+                for (IncompatibleModules incompatibleModule : this.incompatibleModules)
+                    ok = !incompatibleModule.areIncompatibles(module.getModuleClass(), entry.getModuleClass()) && ok;
             if (ok)
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
@@ -211,13 +202,9 @@ public class UHCRandom extends JavaPlugin implements Listener
                     if (module.getName().equalsIgnoreCase(args[0]))
                     {
                         boolean ok = true;
-                        for (IncompatibleModulePair pair : this.incompatibleModules)
-                            if (pair.first.equals(module.getModuleClass()) || pair.second.equals(module.getModuleClass()))
-                            {
-                                for (RandomModule module2 : this.enabledModules)
-                                    if (pair.first.equals(module2.getModuleClass()) || pair.second.equals(module2.getModuleClass()))
-                                        ok = false;
-                            }
+                        for (RandomModule module2 : this.enabledModules)
+                            for (IncompatibleModules incompatibleModule : this.incompatibleModules)
+                                ok = !incompatibleModule.areIncompatibles(module2.getModuleClass(), module.getModuleClass()) && ok;
                         if (ok)
                         {
                             SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
