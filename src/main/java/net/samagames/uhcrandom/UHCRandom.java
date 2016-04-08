@@ -58,7 +58,6 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(OneShootPassiveModule.class, null, "Les animaux meurent en un coup.", new ItemStack(Material.WOOD_SWORD)));
         //this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches au lieu d'une.", new ItemStack(Material.BOW)));
         this.modules.add(new RandomModule(DisableFlintAndSteelModule.class, null, "Vous ne pouvez plus fabriquer de briquet.", new ItemStack(Material.FLINT)));
-        this.modules.add(new RandomModule(DisableLevelTwoPotionModule.class, null, "Les potions de niveau 2 sont désactivées.", new ItemStack(Material.POTION, 1, (short)8262)));
         this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON)));
         this.modules.add(new RandomModule(OneWorkbenchModule.class, null, "Vous ne pouvez créer qu'une seule table de craft.", new ItemStack(Material.WORKBENCH)));
         this.modules.add(new RandomModule(RapidToolsModule.class, new RapidToolsModule.ConfigurationBuilder().setToolsMaterial(RapidToolsModule.ConfigurationBuilder.ToolMaterial.IRON).build(), "Vos outils sont plus puissants.", new ItemStack(Material.IRON_PICKAXE)));
@@ -106,6 +105,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
         api.loadModule(LoveMachineModule.class, null);
+        api.loadModule(DisableLevelTwoPotionModule.class, null);
 
         /** Random modules selector */
         Collections.shuffle(this.modules);
