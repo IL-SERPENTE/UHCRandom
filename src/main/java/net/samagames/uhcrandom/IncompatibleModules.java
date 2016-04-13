@@ -4,7 +4,7 @@ import net.samagames.survivalapi.modules.AbstractSurvivalModule;
 
 public class IncompatibleModules
 {
-    private final Class<? extends AbstractSurvivalModule> modules[];
+    private final Class<? extends AbstractSurvivalModule>[] modules;
 
     @SafeVarargs
     public IncompatibleModules(Class<? extends AbstractSurvivalModule>... modules)
@@ -17,9 +17,9 @@ public class IncompatibleModules
         boolean ok[] = {false, false};
         for (Class<? extends AbstractSurvivalModule> module : modules)
         {
-            if (module.getName().equals(first.getName()))
+            if (module.equals(first))
                 ok[0] = true;
-            if (module.getName().equals(second.getName()))
+            if (module.equals(second))
                 ok[1] = true;
         }
         return ok[0] && ok[1];

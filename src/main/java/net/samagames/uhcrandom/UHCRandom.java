@@ -125,7 +125,7 @@ public class UHCRandom extends JavaPlugin implements Listener
             boolean ok = true;
             for (RandomModule module : this.enabledModules)
                 for (IncompatibleModules incompatibleModule : this.incompatibleModules)
-                    ok = !incompatibleModule.areIncompatibles(module.getModuleClass(), entry.getModuleClass()) && ok;
+                    ok = ok && !incompatibleModule.areIncompatibles(module.getModuleClass(), entry.getModuleClass());
             if (ok)
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
@@ -208,7 +208,7 @@ public class UHCRandom extends JavaPlugin implements Listener
                         boolean ok = true;
                         for (RandomModule module2 : this.enabledModules)
                             for (IncompatibleModules incompatibleModule : this.incompatibleModules)
-                                ok = !incompatibleModule.areIncompatibles(module2.getModuleClass(), module.getModuleClass()) && ok;
+                                ok = ok && !incompatibleModule.areIncompatibles(module2.getModuleClass(), module.getModuleClass());
                         if (ok)
                         {
                             SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
