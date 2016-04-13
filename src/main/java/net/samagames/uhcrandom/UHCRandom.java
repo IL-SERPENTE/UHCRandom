@@ -119,7 +119,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         modulesNumber = Math.min(modulesNumber, this.modules.size());
         modulesNumber = Math.min(modulesNumber, 7); //GUI does not support more than 7 modules actually.
         getLogger().info("Selecting " + modulesNumber + " modules out of " + this.modules.size() + ".");
-        for (int i = 0; i < modulesNumber; i++)
+        int i = 0;
+        while (i < modulesNumber)
         {
             int rand = random.nextInt(this.modules.size());
             RandomModule entry = this.modules.get(rand);
@@ -128,9 +129,8 @@ public class UHCRandom extends JavaPlugin implements Listener
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
                 this.enabledModules.add(entry);
                 this.modules.remove(entry);
+                i++;
             }
-            else
-                i--;
         }
         getLogger().info("Random modules selected");
 
