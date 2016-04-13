@@ -222,7 +222,7 @@ public class UHCRandom extends JavaPlugin implements Listener
                 }
                 else
                     sender.sendMessage(ChatColor.RED + "Module incompatible avec un module déjà présent.");
-                return true;
+                return ;
             }
         }
         sender.sendMessage(ChatColor.RED + "Module non trouvé ou déjà chargé.");
