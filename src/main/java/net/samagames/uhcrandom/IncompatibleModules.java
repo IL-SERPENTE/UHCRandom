@@ -14,7 +14,7 @@ public class IncompatibleModules
 
     public boolean areIncompatibles(Class<? extends AbstractSurvivalModule> first, Class<? extends AbstractSurvivalModule> second)
     {
-        boolean ok[] = {false, false};
+        boolean[] ok = {false, false};
         for (Class<? extends AbstractSurvivalModule> module : modules)
         {
             if (module.equals(first))
