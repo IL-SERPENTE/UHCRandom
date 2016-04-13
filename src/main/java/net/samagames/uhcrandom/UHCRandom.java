@@ -6,6 +6,7 @@ import net.samagames.survivalapi.SurvivalAPI;
 import net.samagames.survivalapi.game.SurvivalGame;
 import net.samagames.survivalapi.game.types.SurvivalSoloGame;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
+import net.samagames.survivalapi.modules.AbstractSurvivalModule;
 import net.samagames.survivalapi.modules.block.*;
 import net.samagames.survivalapi.modules.combat.*;
 import net.samagames.survivalapi.modules.craft.*;
@@ -122,11 +123,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         {
             int rand = random.nextInt(this.modules.size());
             RandomModule entry = this.modules.get(rand);
-            boolean ok = true;
-            for (RandomModule module : this.enabledModules)
-                for (IncompatibleModules incompatibleModule : this.incompatibleModules)
-                    ok = ok && !incompatibleModule.areIncompatibles(module.getModuleClass(), entry.getModuleClass());
-            if (ok)
+            if (isModuleIncompatibleWithOther(entry.getModuleClass()))
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
                 this.enabledModules.add(entry);
@@ -196,37 +193,41 @@ public class UHCRandom extends JavaPlugin implements Listener
             else
                 sender.sendMessage(ChatColor.RED + "La partie n'a pas encore démarré.");
         }
-        else if ("enablemodule".equals(label) && sender.hasPermission("uhcrandom.enablemodule") && args.length == 1)
+        if (!"enablemodule".equals(label) || !sender.hasPermission("uhcrandom.enablemodule") || args.length != 1)
+            return true;
+        if (!started)
         {
-            if (!started)
-            {
-                for (Iterator<RandomModule> it = this.modules.iterator(); it.hasNext();)
-                {
-                    RandomModule module = it.next();
-                    if (module.getName().equalsIgnoreCase(args[0]))
-                    {
-                        boolean ok = true;
-                        for (RandomModule module2 : this.enabledModules)
-                            for (IncompatibleModules incompatibleModule : this.incompatibleModules)
-                                ok = ok && !incompatibleModule.areIncompatibles(module2.getModuleClass(), module.getModuleClass());
-                        if (ok)
-                        {
-                            SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
-                            this.enabledModules.add(module);
-                            it.remove();
-                            sender.sendMessage(ChatColor.GREEN + "Module " + module.getName() + " chargé.");
-                        }
-                        else
-                            sender.sendMessage(ChatColor.RED + "Module incompatible avec un module déjà présent.");
-                        return true;
-                    }
-                }
-                sender.sendMessage(ChatColor.RED + "Module non trouvé.");
-            }
-            else
-                sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
+            sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
+            return true;
         }
+        for (Iterator<RandomModule> it = this.modules.iterator(); it.hasNext();)
+        {
+            RandomModule module = it.next();
+            if (module.getName().equalsIgnoreCase(args[0]))
+            {
+                if (isModuleIncompatibleWithOther(module.getModuleClass()))
+                {
+                    SurvivalAPI.get().loadModule(module.getModuleClass(), module.getConfig());
+                    this.enabledModules.add(module);
+                    it.remove();
+                    sender.sendMessage(ChatColor.GREEN + "Module " + module.getName() + " chargé.");
+                }
+                else
+                    sender.sendMessage(ChatColor.RED + "Module incompatible avec un module déjà présent.");
+                return true;
+            }
+        }
+        sender.sendMessage(ChatColor.RED + "Module non trouvé ou déjà chargé.");
         return true;
+    }
+
+    private boolean isModuleIncompatibleWithOther(Class<? extends AbstractSurvivalModule> moduleClass)
+    {
+        boolean ok = true;
+        for (RandomModule module2 : this.enabledModules)
+            for (IncompatibleModules incompatibleModule : this.incompatibleModules)
+                ok = ok && !incompatibleModule.areIncompatibles(module2.getModuleClass(), moduleClass);
+        return ok;
     }
 
     /**
