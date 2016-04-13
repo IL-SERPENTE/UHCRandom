@@ -57,7 +57,6 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(KillForEnchantmentModule.class, null, "Les tables d'enchantement ne peuvent s'obtenir qu'en tuant vos ennemis.", new ItemStack(Material.ENCHANTMENT_TABLE)));
         this.modules.add(new RandomModule(KillToToggleTimeModule.class, null, "A chaque mort l'heure change.", new ItemStack(Material.WATCH)));
         this.modules.add(new RandomModule(OneShootPassiveModule.class, null, "Les animaux meurent en un coup.", new ItemStack(Material.WOOD_SWORD)));
-        //this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches au lieu d'une.", new ItemStack(Material.BOW)));
         this.modules.add(new RandomModule(DisableFlintAndSteelModule.class, null, "Vous ne pouvez plus fabriquer de briquet.", new ItemStack(Material.FLINT)));
         this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON)));
         this.modules.add(new RandomModule(OneWorkbenchModule.class, null, "Vous ne pouvez créer qu'une seule table de craft.", new ItemStack(Material.WORKBENCH)));
@@ -200,6 +199,15 @@ public class UHCRandom extends JavaPlugin implements Listener
             sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
             return true;
         }
+        handleEnableModuleCommand(sender, args);
+        return true;
+    }
+
+    /**
+     * Handle /enableModule, I put it here instead of making a CommandExecutor ...
+     */
+    private void handleEnableModuleCommand(CommandSender sender, String[] args)
+    {
         for (Iterator<RandomModule> it = this.modules.iterator(); it.hasNext();)
         {
             RandomModule module = it.next();
@@ -218,7 +226,7 @@ public class UHCRandom extends JavaPlugin implements Listener
             }
         }
         sender.sendMessage(ChatColor.RED + "Module non trouvé ou déjà chargé.");
-        return true;
+
     }
 
     private boolean isModuleIncompatibleWithOther(Class<? extends AbstractSurvivalModule> moduleClass)
