@@ -114,9 +114,9 @@ public class UHCRandom extends JavaPlugin implements Listener
         /** Random modules selector */
         Collections.shuffle(this.modules);
         this.enabledModules = new ArrayList<>();
-        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(5)).getAsInt();
+        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
         modulesNumber = Math.min(modulesNumber, this.modules.size());
-        modulesNumber = Math.min(modulesNumber, 7); //GUI does not support more than 7 modules actually.
+        modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
         getLogger().info("Selecting " + modulesNumber + " modules out of " + this.modules.size() + ".");
         int i = 0;
         while (i < modulesNumber)

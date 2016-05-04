@@ -62,12 +62,13 @@ public class RandomGUI extends AbstractGui
     private void next()
     {
         Random random = new Random();
-        this.inventory = Bukkit.createInventory(null, 27, INVNAME);
+        int size = 18 + (((this.enabled - 1) / 7 + 1) * 9);
+        this.inventory = Bukkit.createInventory(null, size, INVNAME);
         int j = 0;
-        for (int i = 0; i < 27; i++)
+        for (int i = 0; i < size; i++)
         {
-            if (i < 13 - (this.enabled / 2) || i > 13 + (this.enabled / 2))
-                this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, colors[random.nextInt(colors.length)]), i, null, "");
+            if (i < 9 || i > size - 9 || i % 9 < 1 || i % 9 > 8 || j >= this.enabled)
+                this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, this.colors[random.nextInt(this.colors.length)]), i, null, "");
             else
             {
                 RandomModule module = this.modules.get(j);
@@ -77,9 +78,9 @@ public class RandomGUI extends AbstractGui
         }
         this.modules.remove(0);
         IGuiManager manager = SamaGamesAPI.get().getGuiManager();
-        for (Player player : plugin.getServer().getOnlinePlayers())
+        for (Player player : this.plugin.getServer().getOnlinePlayers())
         {
-            player.playSound(player.getLocation(), this.index < this.delays.length ? Sound.ORB_PICKUP : Sound.LEVEL_UP, 1F, 1F);
+            player.playSound(player.getLocation(), this.index < this.delays.length ? Sound.ENTITY_EXPERIENCE_ORB_PICKUP : Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
             InventoryView view = player.getOpenInventory();
             if (view == null || view.getTopInventory() == null || !view.getTopInventory().getName().equals(INVNAME))
                 manager.openGui(player, this);
