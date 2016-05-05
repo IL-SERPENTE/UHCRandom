@@ -67,7 +67,7 @@ public class RandomGUI extends AbstractGui
         int j = 0;
         for (int i = 0; i < size; i++)
         {
-            if (i < 9 || i > size - 9 || i % 9 < 1 || i % 9 > 8 || j >= this.enabled)
+            if (i < 9 || i > size - 9 || i % 9 < 1 || i % 9 > 7 || j >= this.enabled)
                 this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, this.colors[random.nextInt(this.colors.length)]), i, null, "");
             else
             {
