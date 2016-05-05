@@ -197,7 +197,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         }
         if (!"enablemodule".equals(label) || !sender.hasPermission("uhcrandom.enablemodule") || args.length != 1)
             return true;
-        if (!started)
+        if (started)
         {
             sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
             return true;
