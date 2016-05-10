@@ -67,8 +67,10 @@ public class RandomGUI extends AbstractGui
         int j = 0;
         for (int i = 0; i < size; i++)
         {
-            if (i < 9 || i > size - 9 || i % 9 < 1 || i % 9 > 7 || j >= this.enabled)
+            if (i < 9 || i > size - 9 || i % 9 < 1 || i % 9 > 7)
                 this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, this.colors[random.nextInt(this.colors.length)]), i, null, "");
+            else if (j >= this.enabled)
+                this.setSlotData(" ", new ItemStack(Material.STAINED_GLASS_PANE, 1, this.colors[random.nextInt(this.colors.length)]), i, null, "");//F**k U Sonar
             else
             {
                 RandomModule module = this.modules.get(j);
@@ -77,6 +79,16 @@ public class RandomGUI extends AbstractGui
             }
         }
         this.modules.remove(0);
+        this.nextNext();
+        this.index++;
+    }
+
+    /**
+     * Seperated method.
+     * HELLO SONAR, HOW ARE YOU ?
+     */
+    private void nextNext()
+    {
         IGuiManager manager = SamaGamesAPI.get().getGuiManager();
         for (Player player : this.plugin.getServer().getOnlinePlayers())
         {
@@ -94,6 +106,5 @@ public class RandomGUI extends AbstractGui
                 this.plugin.getServer().getOnlinePlayers().forEach(Player::closeInventory);
                 this.callback.run();
             }, 240);
-        this.index++;
     }
 }
