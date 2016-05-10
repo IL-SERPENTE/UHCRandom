@@ -12,6 +12,7 @@ import net.samagames.survivalapi.modules.combat.*;
 import net.samagames.survivalapi.modules.craft.*;
 import net.samagames.survivalapi.modules.entity.*;
 import net.samagames.survivalapi.modules.gameplay.*;
+import net.samagames.tools.MojangShitUtils;
 import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -61,7 +62,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON)));
         this.modules.add(new RandomModule(OneWorkbenchModule.class, null, "Vous ne pouvez créer qu'une seule table de craft.", new ItemStack(Material.WORKBENCH)));
         this.modules.add(new RandomModule(RapidToolsModule.class, new RapidToolsModule.ConfigurationBuilder().setToolsMaterial(RapidToolsModule.ConfigurationBuilder.ToolMaterial.IRON).build(), "Vos outils sont plus puissants.", new ItemStack(Material.IRON_PICKAXE)));
-        this.modules.add(new RandomModule(InfestationModule.class, null, "Chaque mob tué a 40% de chances de ré-apparaître.", new ItemStack(Material.MONSTER_EGG, 1, (short)54)));
+        this.modules.add(new RandomModule(InfestationModule.class, null, "Chaque mob tué a 40% de chances de ré-apparaître.", MojangShitUtils.getMonsterEgg(EntityType.SQUID)));
         this.modules.add(new RandomModule(AutomaticLapisModule.class, null, "Les tables d'enchantement n'ont pas besoin de lapis.", new ItemStack(Material.INK_SACK, 1, (short)4)));
         this.modules.add(new RandomModule(BloodDiamondModule.class, new BloodDiamondModule.ConfigurationBuilder().build(), "Chaque diamant miné vous ôtera un demi-coeur.", new ItemStack(Material.DIAMOND)));
         this.modules.add(new RandomModule(CatsEyesModule.class, null, "Vous voyez dans l'obscurité tel un chat.", new ItemStack(Material.EYE_OF_ENDER)));
@@ -86,7 +87,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(TheHobbitModule.class, null, "Utilisez la puissance de l'anneau pour vous rendre invisible.", new ItemStack(Material.GOLD_NUGGET)));
         this.modules.add(new RandomModule(PopeyeModule.class, null, "Mangez des épinards, c'est bon pour la santé.", new ItemStack(Material.INK_SACK, 1, (short)2)));
         this.modules.add(new RandomModule(PyroTechnicsModule.class, null, "Chaque dégats vous emflammera.", new ItemStack(Material.LAVA_BUCKET)));
-        this.modules.add(new RandomModule(PuppyPowerModule.class, null, "Devenez dresseur de loups !", new ItemStack(Material.MONSTER_EGG, 1, (short)95)));
+        this.modules.add(new RandomModule(PuppyPowerModule.class, null, "Devenez dresseur de loups !", MojangShitUtils.getMonsterEgg(EntityType.WOLF)));
         this.modules.add(new RandomModule(ChickenModule.class, null, "Vous commencez avec 1 coeur et demi et une pomme de Notch.", new ItemStack(Material.RAW_CHICKEN)));
         this.modules.add(new RandomModule(GapZapModule.class, null, "Vous perdez votre regénération si vous prenez du dégat.", new ItemStack(Material.POTION, 1, (short)8193)));
         this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
@@ -94,7 +95,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(SuperheroesPlusModule.class, null, "Vous devenez plus fort qu'un super-héros.", new ItemStack(Material.BANNER, 1, (short)0)));
         this.modules.add(new RandomModule(SpeedSwapModule.class, null, "A chaque mort, un effet de vitesse ou de lenteur sera donné.", new ItemStack(Material.POTION, 1, (short)16450)));
         this.modules.add(new RandomModule(VengefulSpiritsModule.class, null, "Un ghast ou un blaze apparait à chaque mort de joueur.", new ItemStack(Material.GHAST_TEAR)));
-        this.modules.add(new RandomModule(ZombiesModule.class, null, "Vous devenez un zombie à votre mort.", new ItemStack(Material.MONSTER_EGG, 1, (short)54)));
+        this.modules.add(new RandomModule(ZombiesModule.class, null, "Vous devenez un zombie à votre mort.", MojangShitUtils.getMonsterEgg(EntityType.ZOMBIE)));
         this.modules.add(new RandomModule(KillSwitchModule.class, null, "Quand vous tuez un joueur, vous prenez son inventaire.", new ItemStack(Material.TRAPPED_CHEST)));
         this.modules.add(new RandomModule(MobOresModule.class, null, "Chaque minerai miné peut faire apparaitre un monstre.", new ItemStack(Material.IRON_ORE)));
         this.modules.add(new RandomModule(OneHealModule.class, null, "Vous obtenez une houe vous permettant de vous soigner.", new ItemStack(Material.GOLD_HOE)));
