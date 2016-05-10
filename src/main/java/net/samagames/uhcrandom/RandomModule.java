@@ -1,7 +1,9 @@
 package net.samagames.uhcrandom;
 
 import net.samagames.survivalapi.modules.AbstractSurvivalModule;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
@@ -22,6 +24,10 @@ public class RandomModule
                 this.moduleclass.getCanonicalName().indexOf("Module"));
         this.description = description;
         this.item = item;
+
+        ItemMeta itemMeta = this.item.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ATTRIBUTES);
+        this.item.setItemMeta(itemMeta);
     }
 
     public Class<? extends AbstractSurvivalModule> getModuleClass()
