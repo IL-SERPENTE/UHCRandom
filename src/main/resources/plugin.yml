@@ -4,5 +4,16 @@ version: 1.0
 
 depend: [SamaGamesAPI, SurvivalAPI]
 
+load: STARTUP
+
 author: Rigner
 website: http://samagames.net/
+
+commands:
+    modules:
+        usage:
+        description: Displays current modules
+        aliases: [module]
+    enablemodule:
+        usage:
+        description:
