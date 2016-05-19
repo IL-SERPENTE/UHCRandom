@@ -43,6 +43,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         SurvivalAPI api = SurvivalAPI.get();
         this.modules = new ArrayList<>();
         this.incompatibleModules = new ArrayList<>();
+        List<RandomModule> generationModules = new ArrayList<>();
         this.started = false;
         Random random = new Random();
 
@@ -109,6 +110,10 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(SpawnEggsModule.class, null, "Lancer un oeuf fait spawn un mob aléatoire.", new ItemStack(Material.EGG)));
         this.modules.add(new RandomModule(NoBowModule.class, null, "Vous ne pouvez plus fabriquer d'arc.", new ItemStack(Material.BOW)));
 
+        generationModules.add(new RandomModule(GenerationModule.class, "bigcrack", "Une faille coupe le monde en deux", new ItemStack(Material.GRASS)));
+        generationModules.add(new RandomModule(GenerationModule.class, "chunkapocalypse", "Chaque chunk a 30% de chance d'être remplacé par de l'air", new ItemStack(Material.GRASS)));
+        generationModules.add(new RandomModule(GenerationModule.class, "netherwarfare", "Le diamant ne se trouve que dans le nether", new ItemStack(Material.NETHERRACK)));
+
         /** Incompatibles modules list */
         this.incompatibleModules.add(new IncompatibleModules(ChickenModule.class, DoubleHealthModule.class, SuperheroesModule.class, SuperheroesPlusModule.class, PotentialHeartsModule.class, NinjanautModule.class, ConstantPotionModule.class));
         this.incompatibleModules.add(new IncompatibleModules(VengefulSpiritsModule.class, ZombiesModule.class));
@@ -125,17 +130,20 @@ public class UHCRandom extends JavaPlugin implements Listener
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
         modulesNumber = Math.min(modulesNumber, this.modules.size());
         modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
-        getLogger().info("Selecting " + modulesNumber + " modules out of " + this.modules.size() + ".");
+        getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
         int i = 0;
         while (i < modulesNumber)
         {
-            int rand = random.nextInt(this.modules.size());
-            RandomModule entry = this.modules.get(rand);
+            int rand = random.nextInt(this.modules.size() + generationModules.size());
+            RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
             if (isModuleIncompatibleWithOther(entry.getModuleClass()))
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
                 this.enabledModules.add(entry);
-                this.modules.remove(entry);
+                if (rand < this.modules.size())
+                    this.modules.remove(entry);
+                else
+                    generationModules.clear();
                 i++;
             }
         }
@@ -195,14 +203,14 @@ public class UHCRandom extends JavaPlugin implements Listener
     {
         if ("modules".equals(label) || "module".equals(label))
         {
-            if (started)
+            if (this.started)
                 displayModules(sender);
             else
                 sender.sendMessage(ChatColor.RED + "La partie n'a pas encore démarré.");
         }
         if (!"enablemodule".equals(label) || !sender.hasPermission("uhcrandom.enablemodule") || args.length != 1)
             return true;
-        if (started)
+        if (this.started)
         {
             sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
             return true;
