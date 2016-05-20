@@ -72,7 +72,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(FastTreeModule.class, null, "Les arbres se cassent en un coup.", new ItemStack(Material.DIAMOND_AXE)));
         this.modules.add(new RandomModule(NineSlotsModule.class, null, "Votre inventaire n'a que 9 cases.", new ItemStack(Material.BARRIER)));
         this.modules.add(new RandomModule(PersonalBlocksModule.class, null, "Vos blocs seront protégés des autres joueurs.", new ItemStack(Material.CHEST)));
-        this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez de la nourriture cuite sur les animaux.", new ItemStack(Material.COOKED_BEEF)));
+        this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF)));
         this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP)));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
