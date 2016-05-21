@@ -112,7 +112,6 @@ public class UHCRandom extends JavaPlugin implements Listener
 
         generationModules.add(new RandomModule(GenerationModule.class, "bigcrack", "Une faille coupe le monde en deux", new ItemStack(Material.GRASS)));
         generationModules.add(new RandomModule(GenerationModule.class, "chunkapocalypse", "Chaque chunk a 30% de chance d'être remplacé par de l'air", new ItemStack(Material.GRASS)));
-        generationModules.add(new RandomModule(GenerationModule.class, "netherwarfare", "Le diamant ne se trouve que dans le nether", new ItemStack(Material.NETHERRACK)));
 
         /** Incompatibles modules list */
         this.incompatibleModules.add(new IncompatibleModules(ChickenModule.class, DoubleHealthModule.class, SuperheroesModule.class, SuperheroesPlusModule.class, PotentialHeartsModule.class, NinjanautModule.class, ConstantPotionModule.class));
