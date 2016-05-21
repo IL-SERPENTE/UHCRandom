@@ -109,6 +109,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(MeleeFunModule.class, null, "Vous pouvez taper vos adversaires aussi vite que possible.", new ItemStack(Material.IRON_SWORD)));
         this.modules.add(new RandomModule(SpawnEggsModule.class, null, "Lancer un oeuf fait spawn un mob aléatoire.", new ItemStack(Material.EGG)));
         this.modules.add(new RandomModule(NoBowModule.class, null, "Vous ne pouvez plus fabriquer d'arc.", new ItemStack(Material.BOW)));
+        this.modules.add(new RandomModule(ElytraModule.class, null, "Envolez vous vers la victoire !", new ItemStack(Material.ELYTRA)));
 
         generationModules.add(new RandomModule(GenerationModule.class, "bigcrack", "Une faille coupe le monde en deux", new ItemStack(Material.GRASS)));
         generationModules.add(new RandomModule(GenerationModule.class, "chunkapocalypse", "Chaque chunk a 30% de chance d'être remplacé par de l'air", new ItemStack(Material.GRASS)));
@@ -117,6 +118,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.incompatibleModules.add(new IncompatibleModules(ChickenModule.class, DoubleHealthModule.class, SuperheroesModule.class, SuperheroesPlusModule.class, PotentialHeartsModule.class, NinjanautModule.class, ConstantPotionModule.class));
         this.incompatibleModules.add(new IncompatibleModules(VengefulSpiritsModule.class, ZombiesModule.class));
         this.incompatibleModules.add(new IncompatibleModules(InfiniteEnchanterModule.class, KillForEnchantmentModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(ElytraModule.class, EveryRoseModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
