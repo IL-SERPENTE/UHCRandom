@@ -119,6 +119,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.incompatibleModules.add(new IncompatibleModules(VengefulSpiritsModule.class, ZombiesModule.class));
         this.incompatibleModules.add(new IncompatibleModules(InfiniteEnchanterModule.class, KillForEnchantmentModule.class));
         this.incompatibleModules.add(new IncompatibleModules(ElytraModule.class, EveryRoseModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(SuperheroesModule.class, SuperheroesPlusModule.class, PyroTechnicsModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
