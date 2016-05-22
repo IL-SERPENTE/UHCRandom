@@ -43,6 +43,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         SurvivalAPI api = SurvivalAPI.get();
         this.modules = new ArrayList<>();
         this.incompatibleModules = new ArrayList<>();
+        List<RandomModule> generationModules = new ArrayList<>();
         this.started = false;
         Random random = new Random();
 
@@ -71,7 +72,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(FastTreeModule.class, null, "Les arbres se cassent en un coup.", new ItemStack(Material.DIAMOND_AXE)));
         this.modules.add(new RandomModule(NineSlotsModule.class, null, "Votre inventaire n'a que 9 cases.", new ItemStack(Material.BARRIER)));
         this.modules.add(new RandomModule(PersonalBlocksModule.class, null, "Vos blocs seront protégés des autres joueurs.", new ItemStack(Material.CHEST)));
-        this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez de la nourriture cuite sur les animaux.", new ItemStack(Material.COOKED_BEEF)));
+        this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF)));
         this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP)));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
@@ -103,15 +104,21 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échangez votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(InventorsModule.class, null, "Chaque fabrication d'outil en diamant est annoncée.", new ItemStack(Material.STICK)));
         this.modules.add(new RandomModule(NinjanautModule.class, null, "Un joueur est choisi pour être plus fort que les autres.", new ItemStack(Material.DIAMOND_CHESTPLATE)));
-        this.modules.add(new RandomModule(RiskyRetrievalModule.class, null, "Chaque minerai miné est dupliqué dans un coffre au milieu du monde.", new ItemStack(Material.ENDER_CHEST)));
+        //this.modules.add(new RandomModule(RiskyRetrievalModule.class, null, "Chaque minerai miné est dupliqué dans un coffre au milieu du monde.", new ItemStack(Material.ENDER_CHEST)));
         this.modules.add(new RandomModule(StockupModule.class, null, "A chaque mort, vous gagnez un demi-coeur d'absorption.", new ItemStack(Material.IRON_CHESTPLATE)));
         this.modules.add(new RandomModule(MeleeFunModule.class, null, "Vous pouvez taper vos adversaires aussi vite que possible.", new ItemStack(Material.IRON_SWORD)));
         this.modules.add(new RandomModule(SpawnEggsModule.class, null, "Lancer un oeuf fait spawn un mob aléatoire.", new ItemStack(Material.EGG)));
         this.modules.add(new RandomModule(NoBowModule.class, null, "Vous ne pouvez plus fabriquer d'arc.", new ItemStack(Material.BOW)));
+        this.modules.add(new RandomModule(ElytraModule.class, null, "Envolez vous vers la victoire !", new ItemStack(Material.ELYTRA)));
+
+        generationModules.add(new RandomModule(GenerationModule.class, "bigcrack", "Une faille coupe le monde en deux", new ItemStack(Material.GRASS)));
+        generationModules.add(new RandomModule(GenerationModule.class, "chunkapocalypse", "Chaque chunk a 30% de chance d'être remplacé par de l'air", new ItemStack(Material.GRASS)));
 
         /** Incompatibles modules list */
         this.incompatibleModules.add(new IncompatibleModules(ChickenModule.class, DoubleHealthModule.class, SuperheroesModule.class, SuperheroesPlusModule.class, PotentialHeartsModule.class, NinjanautModule.class, ConstantPotionModule.class));
         this.incompatibleModules.add(new IncompatibleModules(VengefulSpiritsModule.class, ZombiesModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(InfiniteEnchanterModule.class, KillForEnchantmentModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(ElytraModule.class, EveryRoseModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
@@ -125,17 +132,20 @@ public class UHCRandom extends JavaPlugin implements Listener
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
         modulesNumber = Math.min(modulesNumber, this.modules.size());
         modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
-        getLogger().info("Selecting " + modulesNumber + " modules out of " + this.modules.size() + ".");
+        getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
         int i = 0;
         while (i < modulesNumber)
         {
-            int rand = random.nextInt(this.modules.size());
-            RandomModule entry = this.modules.get(rand);
+            int rand = random.nextInt(this.modules.size() + generationModules.size());
+            RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
             if (isModuleIncompatibleWithOther(entry.getModuleClass()))
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
                 this.enabledModules.add(entry);
-                this.modules.remove(entry);
+                if (rand < this.modules.size())
+                    this.modules.remove(entry);
+                else
+                    generationModules.clear();
                 i++;
             }
         }
@@ -195,14 +205,14 @@ public class UHCRandom extends JavaPlugin implements Listener
     {
         if ("modules".equals(label) || "module".equals(label))
         {
-            if (started)
+            if (this.started)
                 displayModules(sender);
             else
                 sender.sendMessage(ChatColor.RED + "La partie n'a pas encore démarré.");
         }
         if (!"enablemodule".equals(label) || !sender.hasPermission("uhcrandom.enablemodule") || args.length != 1)
             return true;
-        if (started)
+        if (this.started)
         {
             sender.sendMessage(ChatColor.RED + "La partie a déjà démarré.");
             return true;
