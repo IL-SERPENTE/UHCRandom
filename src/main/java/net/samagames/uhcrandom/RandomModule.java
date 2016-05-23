@@ -16,8 +16,14 @@ public class RandomModule
     private String name;
     private String description;
     private ItemStack item;
+    private boolean run;
 
     public RandomModule(Class<? extends AbstractSurvivalModule> moduleclass, Map<String, Object> config, String description, ItemStack item)
+    {
+        this(moduleclass, config, description, item, true);
+    }
+
+    public RandomModule(Class<? extends AbstractSurvivalModule> moduleclass, Map<String, Object> config, String description, ItemStack item, boolean run)
     {
         this.moduleclass = moduleclass;
         this.config = config;
@@ -30,6 +36,7 @@ public class RandomModule
         ItemMeta itemMeta = this.item.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ATTRIBUTES);
         this.item.setItemMeta(itemMeta);
+        this.run = run;
     }
 
     public RandomModule(Class<GenerationModule> moduleclass, String name, String description, ItemStack item)
@@ -71,5 +78,10 @@ public class RandomModule
     public ItemStack getItem()
     {
         return this.item;
+    }
+
+    public boolean isRunModule()
+    {
+        return run;
     }
 }
