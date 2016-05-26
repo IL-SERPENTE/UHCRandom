@@ -75,7 +75,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(NineSlotsModule.class, null, "Votre inventaire n'a que 9 cases.", new ItemStack(Material.BARRIER)));
         this.modules.add(new RandomModule(PersonalBlocksModule.class, null, "Vos blocs seront protégés des autres joueurs.", new ItemStack(Material.CHEST), false));
         this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF), false));
-        this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.ARROW), false));
+        this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.STRING), false));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP), false));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
         this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER)));
@@ -106,6 +106,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échangez votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(InventorsModule.class, null, "Chaque fabrication d'outil en diamant est annoncée.", new ItemStack(Material.STICK)));
         this.modules.add(new RandomModule(NinjanautModule.class, null, "Un joueur est choisi pour être plus fort que les autres.", new ItemStack(Material.DIAMOND_CHESTPLATE)));
+        this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches à la fois", new ItemStack(Material.ARROW, 3)));
         //this.modules.add(new RandomModule(RiskyRetrievalModule.class, null, "Chaque minerai miné est dupliqué dans un coffre au milieu du monde.", new ItemStack(Material.ENDER_CHEST)));
         this.modules.add(new RandomModule(StockupModule.class, null, "A chaque mort, vous gagnez un demi-coeur d'absorption.", new ItemStack(Material.IRON_CHESTPLATE)));
         this.modules.add(new RandomModule(MeleeFunModule.class, null, "Vous pouvez taper vos adversaires aussi vite que possible.", new ItemStack(Material.IRON_SWORD)));
