@@ -288,7 +288,7 @@ public class UHCRandom extends JavaPlugin implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event)
     {
-        if (event.getClickedInventory() != null && event.getClickedInventory().getName().equals(RandomGUI.INVNAME))
+        if (event.getClickedInventory() != null && (event.getClickedInventory().getName().equals(RandomGUI.INVNAME) || event.getClickedInventory().getName().equals(RandomGUI.INVNAME_RUN)))
             event.setCancelled(true);
     }
 
