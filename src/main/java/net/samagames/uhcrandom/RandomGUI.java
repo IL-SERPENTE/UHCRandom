@@ -16,6 +16,7 @@ import java.util.*;
 public class RandomGUI extends AbstractGui
 {
     public static final String INVNAME = "UHCRandom";
+    public static final String INVNAME_RUN = "RandomRun";
 
     private List<RandomModule> modules;
     private Callback callback;
@@ -63,7 +64,7 @@ public class RandomGUI extends AbstractGui
     {
         Random random = new Random();
         int size = 18 + (((this.enabled - 1) / 7 + 1) * 9);
-        this.inventory = Bukkit.createInventory(null, size, INVNAME);
+        this.inventory = Bukkit.createInventory(null, size, this.plugin.isRun() ? INVNAME_RUN : INVNAME);
         int j = 0;
         for (int i = 0; i < size; i++)
         {
@@ -94,7 +95,7 @@ public class RandomGUI extends AbstractGui
         {
             player.playSound(player.getLocation(), this.index < this.delays.length ? Sound.ENTITY_EXPERIENCE_ORB_PICKUP : Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
             InventoryView view = player.getOpenInventory();
-            if (view == null || view.getTopInventory() == null || !view.getTopInventory().getName().equals(INVNAME))
+            if (view == null || view.getTopInventory() == null || (!view.getTopInventory().getName().equals(INVNAME) && !view.getTopInventory().getName().equals(INVNAME_RUN)))
                 manager.openGui(player, this);
             else
                 view.getTopInventory().setContents(this.inventory.getContents());
