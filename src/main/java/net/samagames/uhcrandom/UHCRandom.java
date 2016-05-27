@@ -38,6 +38,7 @@ public class UHCRandom extends JavaPlugin implements Listener
     private List<IncompatibleModules> incompatibleModules;
     private RandomGUI gui;
     private boolean started;
+    private boolean run;
 
     @Override
     public void onEnable()
@@ -135,7 +136,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         Collections.shuffle(this.modules);
         this.enabledModules = new ArrayList<>();
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
-        boolean run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
+        this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
         modulesNumber = Math.min(modulesNumber, this.modules.size());
         modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
         getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
@@ -144,7 +145,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         {
             int rand = random.nextInt(this.modules.size() + generationModules.size());
             RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
-            if ((!run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
+            if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
                 this.enabledModules.add(entry);
@@ -289,5 +290,14 @@ public class UHCRandom extends JavaPlugin implements Listener
     {
         if (event.getClickedInventory() != null && event.getClickedInventory().getName().equals(RandomGUI.INVNAME))
             event.setCancelled(true);
+    }
+
+    /**
+     * Get if this game is RandomRun
+     * @return true if RandomRun, false otherwise
+     */
+    public boolean isRun()
+    {
+        return run;
     }
 }
