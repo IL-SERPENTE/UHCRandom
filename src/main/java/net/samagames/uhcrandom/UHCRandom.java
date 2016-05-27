@@ -82,7 +82,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(LightsOutModule.class, null, "Vous ne pouvez pas poser de torches.", new ItemStack(Material.REDSTONE_TORCH_ON)));
         this.modules.add(new RandomModule(CocoaEffectsModule.class, null, "Vous avez 5 graines de cacao vous donnant des effets.", new ItemStack(Material.INK_SACK, 1, (short)3)));
         this.modules.add(new RandomModule(EveryRoseModule.class, null, "Vous obtenez un plastron en or Thorns III.", new ItemStack(Material.GOLD_CHESTPLATE)));
-        this.modules.add(new RandomModule(GoneFishingModule.class, null, "Vous obtenez une canne à pêche très efficace.", new ItemStack(Material.FISHING_ROD)));
+        this.modules.add(new RandomModule(GoneFishingModule.class, null, "Vous obtenez une canne à pêche très efficace, et vous enchantez à l'infini.", new ItemStack(Material.FISHING_ROD)));
         this.modules.add(new RandomModule(InfiniteEnchanterModule.class, null, "Vous pouvez enchanter à volonté.", new ItemStack(Material.EXP_BOTTLE)));
         this.modules.add(new RandomModule(NightmareModule.class, null, "Il fait toujours nuit.", new ItemStack(Material.STAINED_GLASS_PANE, 1, (short)15)));
         this.modules.add(new RandomModule(PainfullStonesModule.class, null, "Mettez des bottes, le gravier vous pique les pieds.", new ItemStack(Material.GRAVEL)));
@@ -93,7 +93,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(PuppyPowerModule.class, null, "Devenez dresseur de loups !", MojangShitUtils.getMonsterEgg(EntityType.WOLF)));
         this.modules.add(new RandomModule(ChickenModule.class, null, "Vous commencez avec 1 coeur et demi et une pomme de Notch.", new ItemStack(Material.RAW_CHICKEN)));
         this.modules.add(new RandomModule(GapZapModule.class, null, "Vous perdez votre regénération si vous prenez du dégat.", new ItemStack(Material.POTION, 1, (short)8193)));
-        this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
+        this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK), false));
         this.modules.add(new RandomModule(SuperheroesModule.class, null, "Vous devenez un super-héros.", new ItemStack(Material.BANNER, 1, (short)1)));
         this.modules.add(new RandomModule(SuperheroesPlusModule.class, null, "Vous devenez plus fort qu'un super-héros.", new ItemStack(Material.BANNER, 1, (short)0)));
         this.modules.add(new RandomModule(SpeedSwapModule.class, null, "A chaque mort, un effet de vitesse ou de lenteur sera donné.", new ItemStack(Material.POTION, 1, (short)16450)));
