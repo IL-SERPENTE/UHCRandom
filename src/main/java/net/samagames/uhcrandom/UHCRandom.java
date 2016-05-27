@@ -6,6 +6,8 @@ import net.samagames.survivalapi.SurvivalAPI;
 import net.samagames.survivalapi.game.SurvivalGame;
 import net.samagames.survivalapi.game.types.SurvivalSoloGame;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
+import net.samagames.survivalapi.game.types.run.RunBasedSoloGame;
+import net.samagames.survivalapi.game.types.run.RunBasedTeamGame;
 import net.samagames.survivalapi.modules.AbstractSurvivalModule;
 import net.samagames.survivalapi.modules.block.*;
 import net.samagames.survivalapi.modules.combat.*;
@@ -51,36 +53,36 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(DiamondFlowerModule.class, null, "Les fleurs peuvent donner du diamant.", new ItemStack(Material.RED_ROSE)));
         this.modules.add(new RandomModule(HardObsidianModule.class, null, "L'obsidienne est plus dure à casser.", new ItemStack(Material.OBSIDIAN)));
         this.modules.add(new RandomModule(ParanoidModule.class, null, "Tout minage de diamant est annoncé aux autres joueurs.", new ItemStack(Material.DIAMOND_ORE)));
-        this.modules.add(new RandomModule(RapidOresModule.class, new RapidOresModule.ConfigurationBuilder().addDefaults().build(), "Le minage vous rapporte plus de ressources.", new ItemStack(Material.GOLD_PICKAXE)));
-        this.modules.add(new RandomModule(TorchThanCoalModule.class, new TorchThanCoalModule.ConfigurationBuilder().build(), "Le charbon se transforme en torches.", new ItemStack(Material.TORCH)));
-        this.modules.add(new RandomModule(AutomaticTNTModule.class, null, "La TNT s'active automatiquement lorsqu'elle est posée.", new ItemStack(Material.TNT)));
+        this.modules.add(new RandomModule(RapidOresModule.class, new RapidOresModule.ConfigurationBuilder().addDefaults().build(), "Le minage vous rapporte plus de ressources.", new ItemStack(Material.GOLD_PICKAXE), false));
+        this.modules.add(new RandomModule(TorchThanCoalModule.class, new TorchThanCoalModule.ConfigurationBuilder().build(), "Le charbon se transforme en torches.", new ItemStack(Material.TORCH), false));
+        this.modules.add(new RandomModule(AutomaticTNTModule.class, null, "La TNT s'active automatiquement lorsqu'elle est posée.", new ItemStack(Material.TNT), false));
         this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL)));
-        this.modules.add(new RandomModule(DropMyEffectsModule.class, new DropMyEffectsModule.ConfigurationBuilder().blacklistPotionEffect(PotionEffectType.SPEED).build(), "Les effets se transforment en potions à votre mort.", new ItemStack(Material.POTION, 1, (short)8201)));
+        this.modules.add(new RandomModule(DropMyEffectsModule.class, new DropMyEffectsModule.ConfigurationBuilder().blacklistPotionEffect(PotionEffectType.SPEED).build(), "Les effets se transforment en potions à votre mort.", new ItemStack(Material.POTION, 1, (short)8201), false));
         this.modules.add(new RandomModule(KillForEnchantmentModule.class, null, "Les tables d'enchantement ne peuvent s'obtenir qu'en tuant vos ennemis.", new ItemStack(Material.ENCHANTMENT_TABLE)));
         this.modules.add(new RandomModule(KillToToggleTimeModule.class, null, "A chaque mort l'heure change.", new ItemStack(Material.WATCH)));
         this.modules.add(new RandomModule(OneShootPassiveModule.class, null, "Les animaux meurent en un coup.", new ItemStack(Material.WOOD_SWORD)));
         this.modules.add(new RandomModule(DisableFlintAndSteelModule.class, null, "Vous ne pouvez plus fabriquer de briquet.", new ItemStack(Material.FLINT)));
-        this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON)));
+        this.modules.add(new RandomModule(DisableSpeckedMelonModule.class, null, "Le melon scintillant est infabricable.", new ItemStack(Material.SPECKLED_MELON), false));
         this.modules.add(new RandomModule(OneWorkbenchModule.class, null, "Vous ne pouvez créer qu'une seule table de craft.", new ItemStack(Material.WORKBENCH)));
-        this.modules.add(new RandomModule(RapidToolsModule.class, new RapidToolsModule.ConfigurationBuilder().setToolsMaterial(RapidToolsModule.ConfigurationBuilder.ToolMaterial.IRON).build(), "Vos outils sont plus puissants.", new ItemStack(Material.IRON_PICKAXE)));
+        this.modules.add(new RandomModule(RapidToolsModule.class, new RapidToolsModule.ConfigurationBuilder().setToolsMaterial(RapidToolsModule.ConfigurationBuilder.ToolMaterial.IRON).build(), "Vos outils sont plus puissants.", new ItemStack(Material.IRON_PICKAXE), false));
         this.modules.add(new RandomModule(InfestationModule.class, null, "Chaque mob tué a 40% de chances de ré-apparaître.", MojangShitUtils.getMonsterEgg(EntityType.SQUID)));
         this.modules.add(new RandomModule(AutomaticLapisModule.class, null, "Les tables d'enchantement n'ont pas besoin de lapis.", new ItemStack(Material.INK_SACK, 1, (short)4)));
         this.modules.add(new RandomModule(BloodDiamondModule.class, new BloodDiamondModule.ConfigurationBuilder().build(), "Chaque diamant miné vous ôtera un demi-coeur.", new ItemStack(Material.DIAMOND)));
         this.modules.add(new RandomModule(CatsEyesModule.class, null, "Vous voyez dans l'obscurité tel un chat.", new ItemStack(Material.EYE_OF_ENDER)));
-        this.modules.add(new RandomModule(ConstantPotionModule.class, new ConstantPotionModule.ConfigurationBuilder().addPotionEffect(PotionEffectType.SPEED, 1).build(), "Votre vitesse est augmentée.", new ItemStack(Material.POTION, 1, (short)8194)));
+        this.modules.add(new RandomModule(ConstantPotionModule.class, new ConstantPotionModule.ConfigurationBuilder().addPotionEffect(PotionEffectType.SPEED, 1).build(), "Votre vitesse est augmentée.", new ItemStack(Material.POTION, 1, (short)8194), false));
         this.modules.add(new RandomModule(DoubleHealthModule.class, null, "Votre vie est doublée.", new ItemStack(Material.POTION, 1, (short)8229)));
-        this.modules.add(new RandomModule(FastTreeModule.class, null, "Les arbres se cassent en un coup.", new ItemStack(Material.DIAMOND_AXE)));
+        this.modules.add(new RandomModule(FastTreeModule.class, null, "Les arbres se cassent en un coup.", new ItemStack(Material.DIAMOND_AXE), false));
         this.modules.add(new RandomModule(NineSlotsModule.class, null, "Votre inventaire n'a que 9 cases.", new ItemStack(Material.BARRIER)));
-        this.modules.add(new RandomModule(PersonalBlocksModule.class, null, "Vos blocs seront protégés des autres joueurs.", new ItemStack(Material.CHEST)));
-        this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF)));
-        this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.ARROW)));
-        this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP)));
+        this.modules.add(new RandomModule(PersonalBlocksModule.class, null, "Vos blocs seront protégés des autres joueurs.", new ItemStack(Material.CHEST), false));
+        this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF), false));
+        this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.STRING), false));
+        this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP), false));
         this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
         this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER)));
         this.modules.add(new RandomModule(LightsOutModule.class, null, "Vous ne pouvez pas poser de torches.", new ItemStack(Material.REDSTONE_TORCH_ON)));
         this.modules.add(new RandomModule(CocoaEffectsModule.class, null, "Vous avez 5 graines de cacao vous donnant des effets.", new ItemStack(Material.INK_SACK, 1, (short)3)));
         this.modules.add(new RandomModule(EveryRoseModule.class, null, "Vous obtenez un plastron en or Thorns III.", new ItemStack(Material.GOLD_CHESTPLATE)));
-        this.modules.add(new RandomModule(GoneFishingModule.class, null, "Vous obtenez une canne à pêche très efficace.", new ItemStack(Material.FISHING_ROD)));
+        this.modules.add(new RandomModule(GoneFishingModule.class, null, "Vous obtenez une canne à pêche très efficace, et vous enchantez à l'infini.", new ItemStack(Material.FISHING_ROD)));
         this.modules.add(new RandomModule(InfiniteEnchanterModule.class, null, "Vous pouvez enchanter à volonté.", new ItemStack(Material.EXP_BOTTLE)));
         this.modules.add(new RandomModule(NightmareModule.class, null, "Il fait toujours nuit.", new ItemStack(Material.STAINED_GLASS_PANE, 1, (short)15)));
         this.modules.add(new RandomModule(PainfullStonesModule.class, null, "Mettez des bottes, le gravier vous pique les pieds.", new ItemStack(Material.GRAVEL)));
@@ -91,7 +93,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(PuppyPowerModule.class, null, "Devenez dresseur de loups !", MojangShitUtils.getMonsterEgg(EntityType.WOLF)));
         this.modules.add(new RandomModule(ChickenModule.class, null, "Vous commencez avec 1 coeur et demi et une pomme de Notch.", new ItemStack(Material.RAW_CHICKEN)));
         this.modules.add(new RandomModule(GapZapModule.class, null, "Vous perdez votre regénération si vous prenez du dégat.", new ItemStack(Material.POTION, 1, (short)8193)));
-        this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK)));
+        this.modules.add(new RandomModule(HighwayToHellModule.class, null, "Vous êtes équipé pour l'enfer.", new ItemStack(Material.NETHER_BRICK), false));
         this.modules.add(new RandomModule(SuperheroesModule.class, null, "Vous devenez un super-héros.", new ItemStack(Material.BANNER, 1, (short)1)));
         this.modules.add(new RandomModule(SuperheroesPlusModule.class, null, "Vous devenez plus fort qu'un super-héros.", new ItemStack(Material.BANNER, 1, (short)0)));
         this.modules.add(new RandomModule(SpeedSwapModule.class, null, "A chaque mort, un effet de vitesse ou de lenteur sera donné.", new ItemStack(Material.POTION, 1, (short)16450)));
@@ -104,6 +106,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échangez votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(InventorsModule.class, null, "Chaque fabrication d'outil en diamant est annoncée.", new ItemStack(Material.STICK)));
         this.modules.add(new RandomModule(NinjanautModule.class, null, "Un joueur est choisi pour être plus fort que les autres.", new ItemStack(Material.DIAMOND_CHESTPLATE)));
+        this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches à la fois", new ItemStack(Material.ARROW, 3)));
         //this.modules.add(new RandomModule(RiskyRetrievalModule.class, null, "Chaque minerai miné est dupliqué dans un coffre au milieu du monde.", new ItemStack(Material.ENDER_CHEST)));
         this.modules.add(new RandomModule(StockupModule.class, null, "A chaque mort, vous gagnez un demi-coeur d'absorption.", new ItemStack(Material.IRON_CHESTPLATE)));
         this.modules.add(new RandomModule(MeleeFunModule.class, null, "Vous pouvez taper vos adversaires aussi vite que possible.", new ItemStack(Material.IRON_SWORD)));
@@ -120,6 +123,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.incompatibleModules.add(new IncompatibleModules(InfiniteEnchanterModule.class, KillForEnchantmentModule.class));
         this.incompatibleModules.add(new IncompatibleModules(ElytraModule.class, EveryRoseModule.class));
         this.incompatibleModules.add(new IncompatibleModules(SuperheroesModule.class, SuperheroesPlusModule.class, PyroTechnicsModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(GoneFishingModule.class, InfiniteEnchanterModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
@@ -131,6 +135,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         Collections.shuffle(this.modules);
         this.enabledModules = new ArrayList<>();
         int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
+        boolean run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
         modulesNumber = Math.min(modulesNumber, this.modules.size());
         modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
         getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
@@ -139,7 +144,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         {
             int rand = random.nextInt(this.modules.size() + generationModules.size());
             RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
-            if (isModuleIncompatibleWithOther(entry.getModuleClass()))
+            if ((!run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
             {
                 api.loadModule(entry.getModuleClass(), entry.getConfig());
                 this.enabledModules.add(entry);
@@ -155,12 +160,21 @@ public class UHCRandom extends JavaPlugin implements Listener
         /** Solo or team game, depending on config */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
         SurvivalGame game;
-        if (nb > 1)
-            game = new SurvivalTeamGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class, nb);
+        if (run)
+        {
+            if (nb > 1)
+                game = new RunBasedTeamGame<>(this, "randomrun", "RandomRun", "La chance sera-t-elle avec vous ?", "", RandomRunGameLoop.class, nb);
+            else
+                game = new RunBasedSoloGame<>(this, "randomrun", "RandomRun", "La chance sera-t-elle avec vous ?", "", RandomRunGameLoop.class);
+        }
         else
-            game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class);
-
-        api.unloadModule(RandomChestModule.class);
+        {
+            if (nb > 1)
+                game = new SurvivalTeamGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class, nb);
+            else
+                game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class);
+            api.unloadModule(RandomChestModule.class);
+        }
 
         SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
         SamaGamesAPI.get().getGameManager().registerGame(game);
