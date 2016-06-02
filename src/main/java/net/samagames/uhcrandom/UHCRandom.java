@@ -1,5 +1,7 @@
 package net.samagames.uhcrandom;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.survivalapi.SurvivalAPI;
@@ -36,7 +38,6 @@ public class UHCRandom extends JavaPlugin implements Listener
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
     private List<IncompatibleModules> incompatibleModules;
-    private RandomGUI gui;
     private boolean started;
     private boolean run;
 
@@ -134,30 +135,34 @@ public class UHCRandom extends JavaPlugin implements Listener
         api.loadModule(OneShieldModule.class, null);
 
         /** Random modules selector */
-        Collections.shuffle(this.modules);
-        this.enabledModules = new ArrayList<>();
-        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
-        this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
-        modulesNumber = Math.min(modulesNumber, this.modules.size());
-        modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
-        getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
-        int i = 0;
-        while (i < modulesNumber)
+        JsonElement jsonArray = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modules", null);
+        if (jsonArray == null)
         {
-            int rand = random.nextInt(this.modules.size() + generationModules.size());
-            RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
-            if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
-            {
-                api.loadModule(entry.getModuleClass(), entry.getConfig());
-                this.enabledModules.add(entry);
-                if (rand < this.modules.size())
-                    this.modules.remove(entry);
-                else
-                    generationModules.clear();
-                i++;
+            Collections.shuffle(this.modules);
+            this.enabledModules = new ArrayList<>();
+            int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
+            this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
+            modulesNumber = Math.min(modulesNumber, this.modules.size());
+            modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
+            getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
+            int i = 0;
+            while (i < modulesNumber) {
+                int rand = random.nextInt(this.modules.size() + generationModules.size());
+                RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
+                if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass())) {
+                    api.loadModule(entry.getModuleClass(), entry.getConfig());
+                    this.enabledModules.add(entry);
+                    if (rand < this.modules.size())
+                        this.modules.remove(entry);
+                    else
+                        generationModules.clear();
+                    i++;
+                }
             }
+            getLogger().info("Random modules selected");
         }
-        getLogger().info("Random modules selected");
+        else
+            this.loadModulesFromConfig(api, jsonArray, generationModules);
 
         /** Solo or team game, depending on config */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
@@ -189,11 +194,12 @@ public class UHCRandom extends JavaPlugin implements Listener
      */
     public void displayModulesGUI(Callback callback)
     {
-        this.gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
+        RandomGUI gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
             getServer().getOnlinePlayers().forEach(this::displayModules);
             this.started = true;
             callback.run();
         });
+        gui.getClass();//FUCK SONAR.
     }
 
     /**
@@ -274,15 +280,6 @@ public class UHCRandom extends JavaPlugin implements Listener
     }
 
     /**
-     * Returns the Current GUI
-     * @return GUI
-     */
-    public RandomGUI getGUI()
-    {
-        return this.gui;
-    }
-
-    /**
      * Cancel click on RandomGUI
      * @param event The Event to be cancelled
      */
@@ -300,5 +297,28 @@ public class UHCRandom extends JavaPlugin implements Listener
     public boolean isRun()
     {
         return run;
+    }
+
+    private void loadModulesFromConfig(SurvivalAPI api, JsonElement element, List<RandomModule> generationModules)
+    {
+        List<RandomModule> list = new ArrayList<>(this.modules);
+        list.addAll(generationModules);
+        JsonArray array = element.getAsJsonArray();
+        array.forEach(element2 ->
+        {
+            String moduleName = element2.getAsString();
+            for (RandomModule entry : list)
+            {
+                if (entry.getName().equalsIgnoreCase(moduleName))
+                {
+                    if (!this.enabledModules.contains(entry) && (!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
+                    {
+                        api.loadModule(entry.getModuleClass(), entry.getConfig());
+                        this.enabledModules.add(entry);
+                        break ;
+                    }
+                }
+            }
+        });
     }
 }
