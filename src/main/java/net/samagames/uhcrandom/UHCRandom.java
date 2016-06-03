@@ -1,5 +1,7 @@
 package net.samagames.uhcrandom;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.survivalapi.SurvivalAPI;
@@ -36,7 +38,6 @@ public class UHCRandom extends JavaPlugin implements Listener
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
     private List<IncompatibleModules> incompatibleModules;
-    private RandomGUI gui;
     private boolean started;
     private boolean run;
 
@@ -57,7 +58,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(RapidOresModule.class, new RapidOresModule.ConfigurationBuilder().addDefaults().build(), "Le minage vous rapporte plus de ressources.", new ItemStack(Material.GOLD_PICKAXE), false));
         this.modules.add(new RandomModule(TorchThanCoalModule.class, new TorchThanCoalModule.ConfigurationBuilder().build(), "Le charbon se transforme en torches.", new ItemStack(Material.TORCH), false));
         this.modules.add(new RandomModule(AutomaticTNTModule.class, null, "La TNT s'active automatiquement lorsqu'elle est posée.", new ItemStack(Material.TNT), false));
-        this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL)));
+        this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL), false));
         this.modules.add(new RandomModule(DropMyEffectsModule.class, new DropMyEffectsModule.ConfigurationBuilder().blacklistPotionEffect(PotionEffectType.SPEED).build(), "Les effets se transforment en potions à votre mort.", new ItemStack(Material.POTION, 1, (short)8201), false));
         this.modules.add(new RandomModule(KillForEnchantmentModule.class, null, "Les tables d'enchantement ne peuvent s'obtenir qu'en tuant vos ennemis.", new ItemStack(Material.ENCHANTMENT_TABLE)));
         this.modules.add(new RandomModule(KillToToggleTimeModule.class, null, "A chaque mort l'heure change.", new ItemStack(Material.WATCH)));
@@ -78,8 +79,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF), false));
         this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.STRING), false));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP), false));
-        this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
-        this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER)));
+        this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH), false));
+        this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER), false));
         this.modules.add(new RandomModule(LightsOutModule.class, null, "Vous ne pouvez pas poser de torches.", new ItemStack(Material.REDSTONE_TORCH_ON)));
         this.modules.add(new RandomModule(CocoaEffectsModule.class, null, "Vous avez 5 graines de cacao vous donnant des effets.", new ItemStack(Material.INK_SACK, 1, (short)3)));
         this.modules.add(new RandomModule(EveryRoseModule.class, null, "Vous obtenez un plastron en or Thorns III.", new ItemStack(Material.GOLD_CHESTPLATE)));
@@ -106,7 +107,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(PotentialHeartsModule.class, null, "Vous avez 20 coeurs maximum, mais seulement 10 au départ.", new ItemStack(Material.POTION, 1, (short)8257)));
         this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échangez votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(InventorsModule.class, null, "Chaque fabrication d'outil en diamant est annoncée.", new ItemStack(Material.STICK)));
-        this.modules.add(new RandomModule(NinjanautModule.class, null, "Un joueur est choisi pour être plus fort que les autres.", new ItemStack(Material.DIAMOND_CHESTPLATE)));
+        //this.modules.add(new RandomModule(NinjanautModule.class, null, "Un joueur est choisi pour être plus fort que les autres.", new ItemStack(Material.DIAMOND_CHESTPLATE)));
         this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches à la fois", new ItemStack(Material.ARROW, 3)));
         //this.modules.add(new RandomModule(RiskyRetrievalModule.class, null, "Chaque minerai miné est dupliqué dans un coffre au milieu du monde.", new ItemStack(Material.ENDER_CHEST)));
         this.modules.add(new RandomModule(StockupModule.class, null, "A chaque mort, vous gagnez un demi-coeur d'absorption.", new ItemStack(Material.IRON_CHESTPLATE)));
@@ -125,6 +126,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.incompatibleModules.add(new IncompatibleModules(ElytraModule.class, EveryRoseModule.class));
         this.incompatibleModules.add(new IncompatibleModules(SuperheroesModule.class, SuperheroesPlusModule.class, PyroTechnicsModule.class));
         this.incompatibleModules.add(new IncompatibleModules(GoneFishingModule.class, InfiniteEnchanterModule.class));
+        this.incompatibleModules.add(new IncompatibleModules(NoBowModule.class, ThreeArrowModule.class));
 
         /** Always present modules */
         api.loadModule(DisableNotchAppleModule.class, null);
@@ -133,30 +135,34 @@ public class UHCRandom extends JavaPlugin implements Listener
         api.loadModule(OneShieldModule.class, null);
 
         /** Random modules selector */
-        Collections.shuffle(this.modules);
-        this.enabledModules = new ArrayList<>();
-        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
-        this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
-        modulesNumber = Math.min(modulesNumber, this.modules.size());
-        modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
-        getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
-        int i = 0;
-        while (i < modulesNumber)
+        JsonElement jsonArray = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modules", null);
+        if (jsonArray == null)
         {
-            int rand = random.nextInt(this.modules.size() + generationModules.size());
-            RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
-            if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
-            {
-                api.loadModule(entry.getModuleClass(), entry.getConfig());
-                this.enabledModules.add(entry);
-                if (rand < this.modules.size())
-                    this.modules.remove(entry);
-                else
-                    generationModules.clear();
-                i++;
+            Collections.shuffle(this.modules);
+            this.enabledModules = new ArrayList<>();
+            int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
+            this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
+            modulesNumber = Math.min(modulesNumber, this.modules.size());
+            modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
+            getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
+            int i = 0;
+            while (i < modulesNumber) {
+                int rand = random.nextInt(this.modules.size() + generationModules.size());
+                RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
+                if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass())) {
+                    api.loadModule(entry.getModuleClass(), entry.getConfig());
+                    this.enabledModules.add(entry);
+                    if (rand < this.modules.size())
+                        this.modules.remove(entry);
+                    else
+                        generationModules.clear();
+                    i++;
+                }
             }
+            getLogger().info("Random modules selected");
         }
-        getLogger().info("Random modules selected");
+        else
+            this.loadModulesFromConfig(api, jsonArray, generationModules);
 
         /** Solo or team game, depending on config */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
@@ -188,11 +194,12 @@ public class UHCRandom extends JavaPlugin implements Listener
      */
     public void displayModulesGUI(Callback callback)
     {
-        this.gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
+        RandomGUI gui = new RandomGUI(this, this.modules, this.enabledModules, () -> {
             getServer().getOnlinePlayers().forEach(this::displayModules);
             this.started = true;
             callback.run();
         });
+        gui.getClass();//FUCK SONAR.
     }
 
     /**
@@ -273,15 +280,6 @@ public class UHCRandom extends JavaPlugin implements Listener
     }
 
     /**
-     * Returns the Current GUI
-     * @return GUI
-     */
-    public RandomGUI getGUI()
-    {
-        return this.gui;
-    }
-
-    /**
      * Cancel click on RandomGUI
      * @param event The Event to be cancelled
      */
@@ -299,5 +297,28 @@ public class UHCRandom extends JavaPlugin implements Listener
     public boolean isRun()
     {
         return run;
+    }
+
+    private void loadModulesFromConfig(SurvivalAPI api, JsonElement element, List<RandomModule> generationModules)
+    {
+        List<RandomModule> list = new ArrayList<>(this.modules);
+        list.addAll(generationModules);
+        JsonArray array = element.getAsJsonArray();
+        array.forEach(element2 ->
+        {
+            String moduleName = element2.getAsString();
+            for (RandomModule entry : list)
+            {
+                if (entry.getName().equalsIgnoreCase(moduleName))
+                {
+                    if (!this.enabledModules.contains(entry) && (!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
+                    {
+                        api.loadModule(entry.getModuleClass(), entry.getConfig());
+                        this.enabledModules.add(entry);
+                        break ;
+                    }
+                }
+            }
+        });
     }
 }
