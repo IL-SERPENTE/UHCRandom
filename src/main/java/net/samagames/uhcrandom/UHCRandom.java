@@ -58,7 +58,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(RapidOresModule.class, new RapidOresModule.ConfigurationBuilder().addDefaults().build(), "Le minage vous rapporte plus de ressources.", new ItemStack(Material.GOLD_PICKAXE), false));
         this.modules.add(new RandomModule(TorchThanCoalModule.class, new TorchThanCoalModule.ConfigurationBuilder().build(), "Le charbon se transforme en torches.", new ItemStack(Material.TORCH), false));
         this.modules.add(new RandomModule(AutomaticTNTModule.class, null, "La TNT s'active automatiquement lorsqu'elle est posée.", new ItemStack(Material.TNT), false));
-        this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL)));
+        this.modules.add(new RandomModule(BombersModule.class, null, "Ramassez de la TNT sur les cadavres et explosez vos adversaires !", new ItemStack(Material.FLINT_AND_STEEL), false));
         this.modules.add(new RandomModule(DropMyEffectsModule.class, new DropMyEffectsModule.ConfigurationBuilder().blacklistPotionEffect(PotionEffectType.SPEED).build(), "Les effets se transforment en potions à votre mort.", new ItemStack(Material.POTION, 1, (short)8201), false));
         this.modules.add(new RandomModule(KillForEnchantmentModule.class, null, "Les tables d'enchantement ne peuvent s'obtenir qu'en tuant vos ennemis.", new ItemStack(Material.ENCHANTMENT_TABLE)));
         this.modules.add(new RandomModule(KillToToggleTimeModule.class, null, "A chaque mort l'heure change.", new ItemStack(Material.WATCH)));
@@ -79,8 +79,8 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(RapidFoodModule.class, new RapidFoodModule.ConfigurationBuilder().addDefaults().build(), "Les loots des animaux sont augmentés.", new ItemStack(Material.COOKED_BEEF), false));
         this.modules.add(new RandomModule(RapidUsefullModule.class, new RapidUsefullModule.ConfigurationBuilder().addDefaults().build(), "Vous obtenez des éléments utiles sur certains blocs.", new ItemStack(Material.STRING), false));
         this.modules.add(new RandomModule(RemoveItemOnUseModule.class, null, "Les bols disparaissent une fois bus.", new ItemStack(Material.MUSHROOM_SOUP), false));
-        this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH)));
-        this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER)));
+        this.modules.add(new RandomModule(RottenPotionsModule.class, null, "Manger de la chair de zombie vous donne un effet aléatoire.", new ItemStack(Material.ROTTEN_FLESH), false));
+        this.modules.add(new RandomModule(EntityDropModule.class, new EntityDropModule.ConfigurationBuilder().addCustomDrops(EntityType.ZOMBIE, new ItemStack(Material.FEATHER)).build(), "Les zombies donnent des plumes à leur mort.", new ItemStack(Material.FEATHER), false));
         this.modules.add(new RandomModule(LightsOutModule.class, null, "Vous ne pouvez pas poser de torches.", new ItemStack(Material.REDSTONE_TORCH_ON)));
         this.modules.add(new RandomModule(CocoaEffectsModule.class, null, "Vous avez 5 graines de cacao vous donnant des effets.", new ItemStack(Material.INK_SACK, 1, (short)3)));
         this.modules.add(new RandomModule(EveryRoseModule.class, null, "Vous obtenez un plastron en or Thorns III.", new ItemStack(Material.GOLD_CHESTPLATE)));
