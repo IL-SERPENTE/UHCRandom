@@ -135,7 +135,11 @@ public class UHCRandom extends JavaPlugin implements Listener
         api.loadModule(OneShieldModule.class, null);
 
         /** Random modules selector */
-        loadModules(generationModules, random, api);
+        JsonElement jsonArray = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modules", null);
+        if (jsonArray == null)
+            loadModules(generationModules, random, api);
+        else
+            loadModulesFromConfig(api, jsonArray, generationModules);
 
         /** Solo or team game, depending on config */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
@@ -161,38 +165,39 @@ public class UHCRandom extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(this, this);
     }
 
+    /**
+     * Random modules selector. (seperated for Sonar).
+     *
+     * @param generationModules Generation Modules.
+     * @param random Random.
+     * @param api SurvivalAPI instance.
+     */
     private void loadModules(List<RandomModule> generationModules, Random random, SurvivalAPI api)
     {
-        JsonElement jsonArray = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modules", null);
-        if (jsonArray == null)
+        Collections.shuffle(this.modules);
+        this.enabledModules = new ArrayList<>();
+        int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
+        this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
+        modulesNumber = Math.min(modulesNumber, this.modules.size());
+        modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
+        getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
+        int i = 0;
+        while (i < modulesNumber)
         {
-            Collections.shuffle(this.modules);
-            this.enabledModules = new ArrayList<>();
-            int modulesNumber = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modulesNumber", new JsonPrimitive(7)).getAsInt();
-            this.run = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("run", new JsonPrimitive(false)).getAsBoolean();
-            modulesNumber = Math.min(modulesNumber, this.modules.size());
-            modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
-            getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
-            int i = 0;
-            while (i < modulesNumber)
+            int rand = random.nextInt(this.modules.size() + generationModules.size());
+            RandomModule entry = rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size());
+            if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
             {
-                int rand = random.nextInt(this.modules.size() + generationModules.size());
-                RandomModule entry = rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size());
-                if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
-                {
-                    api.loadModule(entry.getModuleClass(), entry.getConfig());
-                    this.enabledModules.add(entry);
-                    if (rand < this.modules.size())
-                        this.modules.remove(entry);
-                    else
-                        generationModules.clear();
-                    i++;
-                }
+                api.loadModule(entry.getModuleClass(), entry.getConfig());
+                this.enabledModules.add(entry);
+                if (rand < this.modules.size())
+                    this.modules.remove(entry);
+                else
+                    generationModules.clear();
+                i++;
             }
-            getLogger().info("Random modules selected");
         }
-        else
-            this.loadModulesFromConfig(api, jsonArray, generationModules);
+        getLogger().info("Random modules selected");
     }
 
     /**
@@ -281,8 +286,12 @@ public class UHCRandom extends JavaPlugin implements Listener
     {
         boolean ok = true;
         for (RandomModule module2 : this.enabledModules)
+        {
+            if (module2.getModuleClass().equals(moduleClass))
+                return false;
             for (IncompatibleModules incompatibleModule : this.incompatibleModules)
                 ok = ok && !incompatibleModule.areIncompatibles(module2.getModuleClass(), moduleClass);
+        }
         return ok;
     }
 
@@ -316,7 +325,7 @@ public class UHCRandom extends JavaPlugin implements Listener
             String moduleName = element2.getAsString();
             for (RandomModule entry : list)
             {
-                if (entry.getName().equalsIgnoreCase(moduleName) && !this.enabledModules.contains(entry) && (!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
+                if (entry.getName().equalsIgnoreCase(moduleName) && (!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
                 {
                     api.loadModule(entry.getModuleClass(), entry.getConfig());
                     this.enabledModules.add(entry);
