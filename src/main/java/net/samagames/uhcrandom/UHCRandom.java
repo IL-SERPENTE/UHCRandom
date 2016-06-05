@@ -35,6 +35,8 @@ import java.util.*;
 
 public class UHCRandom extends JavaPlugin implements Listener
 {
+    private static final String DESCRIPTION = "La chance sera-t-elle avec vous ?";
+
     private List<RandomModule> modules;
     private List<RandomModule> enabledModules;
     private List<IncompatibleModules> incompatibleModules;
@@ -107,9 +109,7 @@ public class UHCRandom extends JavaPlugin implements Listener
         this.modules.add(new RandomModule(PotentialHeartsModule.class, null, "Vous avez 20 coeurs maximum, mais seulement 10 au départ.", new ItemStack(Material.POTION, 1, (short)8257)));
         this.modules.add(new RandomModule(SwitcherooModule.class, null, "Vous échangez votre place avec votre adversaire si vous le touchez à l'arc.", new ItemStack(Material.ARROW)));
         this.modules.add(new RandomModule(InventorsModule.class, null, "Chaque fabrication d'outil en diamant est annoncée.", new ItemStack(Material.STICK)));
-        //this.modules.add(new RandomModule(NinjanautModule.class, null, "Un joueur est choisi pour être plus fort que les autres.", new ItemStack(Material.DIAMOND_CHESTPLATE)));
         this.modules.add(new RandomModule(ThreeArrowModule.class, null, "Vous tirez 3 flèches à la fois", new ItemStack(Material.ARROW, 3)));
-        //this.modules.add(new RandomModule(RiskyRetrievalModule.class, null, "Chaque minerai miné est dupliqué dans un coffre au milieu du monde.", new ItemStack(Material.ENDER_CHEST)));
         this.modules.add(new RandomModule(StockupModule.class, null, "A chaque mort, vous gagnez un demi-coeur d'absorption.", new ItemStack(Material.IRON_CHESTPLATE)));
         this.modules.add(new RandomModule(MeleeFunModule.class, null, "Vous pouvez taper vos adversaires aussi vite que possible.", new ItemStack(Material.IRON_SWORD)));
         this.modules.add(new RandomModule(SpawnEggsModule.class, null, "Lancer un oeuf fait spawn un mob aléatoire.", new ItemStack(Material.EGG)));
@@ -135,6 +135,34 @@ public class UHCRandom extends JavaPlugin implements Listener
         api.loadModule(OneShieldModule.class, null);
 
         /** Random modules selector */
+        loadModules(generationModules, random, api);
+
+        /** Solo or team game, depending on config */
+        int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
+        SurvivalGame game;
+        if (run)
+        {
+            if (nb > 1)
+                game = new RunBasedTeamGame<>(this, "randomrun", "RandomRun", UHCRandom.DESCRIPTION, "", RandomRunGameLoop.class, nb);
+            else
+                game = new RunBasedSoloGame<>(this, "randomrun", "RandomRun", UHCRandom.DESCRIPTION, "", RandomRunGameLoop.class);
+        }
+        else
+        {
+            if (nb > 1)
+                game = new SurvivalTeamGame<>(this, "uhcrandom", "UHCRandom", UHCRandom.DESCRIPTION, "", UHCRandomGameLoop.class, nb);
+            else
+                game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", UHCRandom.DESCRIPTION, "", UHCRandomGameLoop.class);
+            api.unloadModule(RandomChestModule.class);
+        }
+
+        SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
+        SamaGamesAPI.get().getGameManager().registerGame(game);
+        getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    private void loadModules(List<RandomModule> generationModules, Random random, SurvivalAPI api)
+    {
         JsonElement jsonArray = SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("modules", null);
         if (jsonArray == null)
         {
@@ -146,10 +174,12 @@ public class UHCRandom extends JavaPlugin implements Listener
             modulesNumber = Math.min(modulesNumber, 28); //GUI does not support more than 28 modules actually.
             getLogger().info("Selecting " + modulesNumber + " modules out of " + (this.modules.size() + generationModules.size()) + ".");
             int i = 0;
-            while (i < modulesNumber) {
+            while (i < modulesNumber)
+            {
                 int rand = random.nextInt(this.modules.size() + generationModules.size());
-                RandomModule entry = (rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size()));
-                if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass())) {
+                RandomModule entry = rand < this.modules.size() ? this.modules.get(rand) : generationModules.get(rand - this.modules.size());
+                if ((!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
+                {
                     api.loadModule(entry.getModuleClass(), entry.getConfig());
                     this.enabledModules.add(entry);
                     if (rand < this.modules.size())
@@ -163,29 +193,6 @@ public class UHCRandom extends JavaPlugin implements Listener
         }
         else
             this.loadModulesFromConfig(api, jsonArray, generationModules);
-
-        /** Solo or team game, depending on config */
-        int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
-        SurvivalGame game;
-        if (run)
-        {
-            if (nb > 1)
-                game = new RunBasedTeamGame<>(this, "randomrun", "RandomRun", "La chance sera-t-elle avec vous ?", "", RandomRunGameLoop.class, nb);
-            else
-                game = new RunBasedSoloGame<>(this, "randomrun", "RandomRun", "La chance sera-t-elle avec vous ?", "", RandomRunGameLoop.class);
-        }
-        else
-        {
-            if (nb > 1)
-                game = new SurvivalTeamGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class, nb);
-            else
-                game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", "La chance sera-t-elle avec vous ?", "", UHCRandomGameLoop.class);
-            api.unloadModule(RandomChestModule.class);
-        }
-
-        SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
-        SamaGamesAPI.get().getGameManager().registerGame(game);
-        getServer().getPluginManager().registerEvents(this, this);
     }
 
     /**
@@ -199,7 +206,7 @@ public class UHCRandom extends JavaPlugin implements Listener
             this.started = true;
             callback.run();
         });
-        gui.getClass();//FUCK SONAR.
+        gui.getInventory();//FUCK YOU REALLY HARD SONAR.
     }
 
     /**
@@ -309,14 +316,11 @@ public class UHCRandom extends JavaPlugin implements Listener
             String moduleName = element2.getAsString();
             for (RandomModule entry : list)
             {
-                if (entry.getName().equalsIgnoreCase(moduleName))
+                if (entry.getName().equalsIgnoreCase(moduleName) && !this.enabledModules.contains(entry) && (!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
                 {
-                    if (!this.enabledModules.contains(entry) && (!this.run || entry.isRunModule()) && isModuleIncompatibleWithOther(entry.getModuleClass()))
-                    {
-                        api.loadModule(entry.getModuleClass(), entry.getConfig());
-                        this.enabledModules.add(entry);
-                        break ;
-                    }
+                    api.loadModule(entry.getModuleClass(), entry.getConfig());
+                    this.enabledModules.add(entry);
+                    break ;
                 }
             }
         });
