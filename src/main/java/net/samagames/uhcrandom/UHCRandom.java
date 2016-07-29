@@ -150,6 +150,8 @@ public class UHCRandom extends JavaPlugin implements Listener
                 game = new RunBasedTeamGame<>(this, "randomrun", "RandomRun", UHCRandom.DESCRIPTION, "", RandomRunGameLoop.class, nb);
             else
                 game = new RunBasedSoloGame<>(this, "randomrun", "RandomRun", UHCRandom.DESCRIPTION, "", RandomRunGameLoop.class);
+
+            SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new RandomRunStatisticsHelper());
         }
         else
         {
@@ -157,6 +159,8 @@ public class UHCRandom extends JavaPlugin implements Listener
                 game = new SurvivalTeamGame<>(this, "uhcrandom", "UHCRandom", UHCRandom.DESCRIPTION, "", UHCRandomGameLoop.class, nb);
             else
                 game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", UHCRandom.DESCRIPTION, "", UHCRandomGameLoop.class);
+
+            SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new UHCRandomStatisticsHelper());
             api.unloadModule(RandomChestModule.class);
         }
 
