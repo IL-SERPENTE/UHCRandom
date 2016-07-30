@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.games.GamesNames;
 import net.samagames.survivalapi.SurvivalAPI;
 import net.samagames.survivalapi.game.SurvivalGame;
 import net.samagames.survivalapi.game.types.SurvivalSoloGame;
@@ -151,6 +152,8 @@ public class UHCRandom extends JavaPlugin implements Listener
             else
                 game = new RunBasedSoloGame<>(this, "randomrun", "RandomRun", UHCRandom.DESCRIPTION, "", RandomRunGameLoop.class);
 
+            SamaGamesAPI.get().getStatsManager().setStatsToLoad(GamesNames.RANDOMRUN, true);
+            SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.RANDOMRUN, true);
             SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new RandomRunStatisticsHelper());
         }
         else
@@ -160,7 +163,10 @@ public class UHCRandom extends JavaPlugin implements Listener
             else
                 game = new SurvivalSoloGame<>(this, "uhcrandom", "UHCRandom", UHCRandom.DESCRIPTION, "", UHCRandomGameLoop.class);
 
+            SamaGamesAPI.get().getStatsManager().setStatsToLoad(GamesNames.UHCRANDOM, true);
+            SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.UHCRANDOM, true);
             SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new UHCRandomStatisticsHelper());
+            
             api.unloadModule(RandomChestModule.class);
         }
 
